@@ -1,0 +1,15 @@
+{
+	"type": ["GET", "PUT", "POST", "DELETE"],
+	
+	"create":
+	{
+		"name": "admin",
+		"enabled": false
+	},
+	"update":
+	{
+		"name": "moderator",
+		"enabled": true
+	}
+	
+}
