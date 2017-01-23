@@ -33,6 +33,14 @@
   </dependencyManagement>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.dbrage.lib</groupId>
+      <artifactId>easyrs-test</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
@@ -114,6 +122,11 @@
 
 
 
+    <dependency>
+      <groupId>com.squareup</groupId>
+      <artifactId>javawriter</artifactId>
+      <version>2.5.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -121,7 +134,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -146,12 +158,42 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <build>
+        <finalName>easyrs</finalName>
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.16</version>
             <configuration>
               <skip>true</skip>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>${project.build.directory}/generated-sources/apt</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+              <generatedSourcesDirectory>${project.build.directory}/generated-sources/apt</generatedSourcesDirectory>
+              <compilerArgument>-proc:none</compilerArgument>
             </configuration>
           </plugin>
         </plugins>

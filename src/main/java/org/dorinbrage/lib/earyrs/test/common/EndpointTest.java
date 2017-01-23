@@ -15,7 +15,7 @@ public abstract class EndpointTest<D, E> {
 
   private Class<D> dto;
   
-  public EndpointTest() throws JsonProcessingException, IOException {
+  public EndpointTest(){
 
     System.out.println("Started");
     this.resourcePath = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];

@@ -82,6 +82,7 @@ public class JsonUtils {
   }
 
   public static <D, E> D jsonToObject(LinkedHashMap<D, E> data) {
+    return null;
   }
 
   /**
