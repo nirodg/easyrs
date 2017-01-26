@@ -5,8 +5,6 @@
 	<groupId>org.dbrage.lib</groupId>
 	<artifactId>easyrs-test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>jaxrs-arq-wildfly-testing</name>
-
 
 	<properties>
 		<easyrs.test.folder>easyrs-tests</easyrs.test.folder>
@@ -135,4 +133,5 @@
 
 		</plugins>
 	</build>
+	
 </project>
