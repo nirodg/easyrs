@@ -1,6 +1,7 @@
 package com.dbrage.lib.easyrs.client;
 
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -16,63 +17,70 @@ import org.junit.Assert;
  * 
  * @author Dorin_Brage
  * 
- * @param <T> the type of entity which must be tested
+ * @param <T>
+ *          the type of entity which must be tested
  */
 public class Client<T> {
 
-	private String host;
-	private String endpoint;
-	private String fullPath;
+	private String endpoint = "";
 
 	private ResteasyClient client;
 	private ResteasyWebTarget target;
 
-	private T entity;
+	private Object entity;
+	private Object entities;
 
 	public Client() {
 		client = new ResteasyClientBuilder().build();
 	}
 
-	public List<T> getAll() {
+	public Object getAll() {
 		Response response = target.request().get();
-		return (List<T>) response.readEntity(entity.getClass());
+		return response.readEntity(entities.getClass());
 	}
 
-	public T getById(String id) {
+	public Object getById(String id) {
 		setPathToPersistedEntity(id);
 		Response response = target.request().get();
-		return (T) response.readEntity(entity.getClass());
-	}
-
-	public T put(T entity) {
-		Response response = target.request().put(Entity.entity(entity, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(200, response.getStatus());
-		return (T) response.readEntity(entity.getClass());
+		return response.readEntity(entity.getClass());
 	}
 
-	public T post(String id, T entity) {
+	public Object put(T entity) {
+		Response response = target.request().put(Entity.entity(entity, MediaType.APPLICATION_JSON));
+		return response.readEntity(entity.getClass());
+	}
+
+	public Object post(String id, T entity) {
+
 		setPathToPersistedEntity(id);
 		Response response = target.request().post(Entity.entity(entity, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(200, response.getStatus());
-		return (T) response.readEntity(entity.getClass());
+		return response.readEntity(entity.getClass());
 	}
 
-	public T delete(String id) {
+	public Object delete(String id, T entity) {
 		setPathToPersistedEntity(id);
+
 		Response response = target.request().delete();
 		Assert.assertEquals(200, response.getStatus());
-		return (T) response.readEntity(entity.getClass());
+		return response.readEntity(entity.getClass());
 	}
 
 	private void setPathToPersistedEntity(String id) {
-		target = client.target(fullPath.concat("/").concat(id));
+		target = client.target(endpoint.concat("/").concat(id));
 	}
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
-		this.fullPath.concat(endpoint);
-		target = client.target(this.fullPath);
-		System.out.println(this.fullPath);
+
+		try {
+			target = client.target(new URI(endpoint));
+		} catch (NullPointerException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(endpoint);
 	}
 
 	public ResteasyClient getClient() {
@@ -83,16 +91,24 @@ public class Client<T> {
 		this.client = client;
 	}
 
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
 	public String getEndpoint() {
 		return endpoint;
+	}
+
+	public Object getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Object entity) {
+		this.entity = entity;
+	}
+
+	public Object getEntities() {
+		return entities;
+	}
+
+	public void setEntities(Object entities) {
+		this.entities = entities;
 	}
 
 }
