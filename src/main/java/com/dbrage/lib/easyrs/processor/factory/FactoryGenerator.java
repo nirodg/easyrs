@@ -22,11 +22,14 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dbrage.lib.easyrs.arquillian.Container;
+import com.dbrage.lib.easyrs.arquillian.enums.CrudOperation;
+import com.dbrage.lib.easyrs.arquillian.utils.Checker;
 import com.dbrage.lib.easyrs.client.Client;
 import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
 import com.squareup.javawriter.JavaWriter;
@@ -41,7 +44,8 @@ public class FactoryGenerator {
 	private static final String VAR_CLIENT = "client";
 	private static final String VAR_PERSISTED_ENTITY = "persistedEntity";
 	private static final String VAR_PERSISTED_ENTITIES = "persistedEntities";
-
+	private static final String VAR_ENTITY = "entity";
+	private static final String VAR_ENTITIES = "entities";
 
 	private static final String GENERATED_CLASS_SUFFIX = "TestEndpoint";
 
@@ -52,6 +56,8 @@ public class FactoryGenerator {
 	private static final String METHOD_CREATE = "create";
 	private static final String METHOD_UPDATE = "update";
 	private static final String METHOD_DELETE = "delete";
+
+	private static final String VAR_FORMATED_ENTITY = "%s %s = new %s()";
 
 	private short sequence = 1;
 
@@ -64,6 +70,8 @@ public class FactoryGenerator {
 
 	private FactoryClasses factory;
 	
+	private String entityCannonicalName;
+
 	public FactoryGenerator(Messager messager) {
 		this.messager = messager;
 	}
@@ -72,7 +80,9 @@ public class FactoryGenerator {
 
 		this.annotatedClazz = annotatedClazz;
 		this.factory = factoryClasses;
+		entityCannonicalName = factoryClasses.getEntity().toString();
 		
+
 		String name = factoryClasses.getQualifiedName().toString().concat(GENERATED_CLASS_SUFFIX);
 
 		setUpWriter(name, filer);
@@ -82,7 +92,7 @@ public class FactoryGenerator {
 		setRunWithArquillian();
 
 		startClass(name);
-		
+
 		defineVariables();
 
 		setSetUp();
@@ -160,8 +170,13 @@ public class FactoryGenerator {
 		classImports.add(InSequence.class.getCanonicalName());
 		classImports.add(Before.class.getCanonicalName());
 		classImports.add(Client.class.getCanonicalName());
-		
-		classImports.add(this.factory.getEntity().toString());
+		classImports.add(Assert.class.getCanonicalName());
+		classImports.add(List.class.getCanonicalName());
+		classImports.add(ArrayList.class.getCanonicalName());
+		classImports.add(CrudOperation.class.getCanonicalName());
+		// Since it´s in the same project there is no need to import it
+		//classImports.add(this.factory.getEntity().toString());
+		classImports.add(Checker.class.getCanonicalName());
 	}
 
 	private void createPackage(TypeElement annotatedClazz, Elements elements) {
@@ -209,9 +224,11 @@ public class FactoryGenerator {
 
 	private void startClass(String className) {
 
+		String extendedContainer = String.format("%s<%s>", Container.class.getName(), factory.getEntity());
+
 		try {
 			// Add the class
-			jw.beginType(className, "class", EnumSet.of(Modifier.PUBLIC), Container.class.getName());
+			jw.beginType(className, "class", EnumSet.of(Modifier.PUBLIC), extendedContainer);
 			jw.emitEmptyLine();
 		} catch (IOException e) {
 			error(annotatedClazz, "Couldn't start writing the class for %s\n%s", annotatedClazz.getSimpleName(),
@@ -237,9 +254,9 @@ public class FactoryGenerator {
 			jw.emitAnnotation(Before.class);
 
 			jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
-			
+
 			initializeInstances();
-			
+
 			jw.endMethod();
 			jw.emitEmptyLine();
 
@@ -251,25 +268,26 @@ public class FactoryGenerator {
 	private void defineVariables() {
 		try {
 			// HTTP Client
-			String clientFormatedVariable = String.format("%s<%s>", Client.class.getSimpleName(), this.factory.getEntity());
+			String clientFormatedVariable = String.format("%s<%s>", Client.class.getSimpleName(),
+					this.factory.getEntity());
+
 			jw.emitField(clientFormatedVariable, VAR_CLIENT, getCustomModifier(Modifier.PRIVATE));
-			
 			
 			jw.emitEmptyLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void initializeInstances() {
 		try {
 
 			jw.emitStatement(VAR_CLIENT + " = new %s<>()", Client.class.getSimpleName());
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void setGetAllMethod() {
@@ -281,8 +299,12 @@ public class FactoryGenerator {
 			jw.emitAnnotation(Test.class);
 			jw.emitAnnotation(InSequence.class, sequence);
 
-			// Deployment method
 			jw.beginMethod(METHOD_VOID, METHOD_GET_ALL, modifier, null, null);
+			
+			jw.emitStatement("List<%s> %s = (ArrayList<%s>) getData(%s)", factory.getEntity(), VAR_ENTITIES, factory.getEntity(),"CrudOperation.ALL" );
+			jw.emitStatement("List<%s> %s = (ArrayList<%s>) %s", factory.getEntity(), VAR_PERSISTED_ENTITIES, factory.getEntity(), "client.getAll()");
+			jw.emitStatement("Assert.assertEquals(%s, %s)", VAR_ENTITIES.concat(".size()"), VAR_PERSISTED_ENTITIES.concat(".size()"));
+			
 			jw.endMethod();
 			jw.emitEmptyLine();
 
@@ -302,8 +324,19 @@ public class FactoryGenerator {
 			jw.emitAnnotation(Test.class);
 			jw.emitAnnotation(InSequence.class, sequence);
 
-			// Deployment method
 			jw.beginMethod(METHOD_VOID, METHOD_CREATE, modifier, null, null);
+			
+			jw.emitStatement("%s %s = (%s) getData(%s)", factory.getEntity(), VAR_ENTITY, factory.getEntity(), "CrudOperation.CREATE");
+			jw.emitStatement("Assert.assertNotNull(%s)", VAR_ENTITY);
+			jw.emitEmptyLine();
+			
+			jw.emitStatement("%s %s = (%s) %s(%s)", factory.getEntity(), VAR_PERSISTED_ENTITY, factory.getEntity(), "client.put", VAR_ENTITY);
+			jw.emitStatement("Assert.assertNotNull(%s)", VAR_PERSISTED_ENTITY);
+			jw.emitEmptyLine();
+			
+			jw.emitStatement("Checker.assertEquals(%s, %s)", VAR_ENTITY, VAR_PERSISTED_ENTITY);
+			jw.emitEmptyLine();
+			
 			jw.endMethod();
 			jw.emitEmptyLine();
 
@@ -323,8 +356,20 @@ public class FactoryGenerator {
 			jw.emitAnnotation(Test.class);
 			jw.emitAnnotation(InSequence.class, sequence);
 
-			// Deployment method
 			jw.beginMethod(METHOD_VOID, METHOD_UPDATE, modifier, null, null);
+
+			
+			jw.emitStatement("%s %s = (%s) getData(%s)", factory.getEntity(), VAR_ENTITY, factory.getEntity(), "CrudOperation.UPDATE");
+			jw.emitStatement("Assert.assertNotNull(%s)", VAR_ENTITY);
+			jw.emitEmptyLine();
+			
+			jw.emitStatement("%s %s = (%s) %s(%s, %s)", factory.getEntity(), VAR_PERSISTED_ENTITY, factory.getEntity(), "client.post", VAR_ENTITY.concat(".getGuid()"), VAR_ENTITY);
+			jw.emitStatement("Assert.assertNotNull(%s)", VAR_PERSISTED_ENTITY);
+			jw.emitEmptyLine();
+			
+			jw.emitStatement("Checker.assertEquals(%s, %s)", VAR_ENTITY, VAR_PERSISTED_ENTITY);
+			jw.emitEmptyLine();
+			
 			jw.endMethod();
 			jw.emitEmptyLine();
 
@@ -343,8 +388,20 @@ public class FactoryGenerator {
 			jw.emitAnnotation(Test.class);
 			jw.emitAnnotation(InSequence.class, sequence);
 
-			// Deployment method
 			jw.beginMethod(METHOD_VOID, METHOD_DELETE, modifier, null, null);
+			
+			jw.emitStatement("%s %s = (%s) getData(%s)", factory.getEntity(), VAR_ENTITY, factory.getEntity(), "CrudOperation.DELETE");
+			jw.emitStatement("Assert.assertNotNull(%s)", VAR_ENTITY);
+			jw.emitEmptyLine();
+			
+			jw.emitStatement("%s %s = (%s) %s(%s, %s)", factory.getEntity(), VAR_PERSISTED_ENTITY, factory.getEntity(), "client.delete", VAR_ENTITY.concat(".getGuid()"), VAR_ENTITY);
+			jw.emitStatement("Assert.assertNotNull(%s)", VAR_PERSISTED_ENTITY);
+			jw.emitEmptyLine();
+			
+			// Check not null
+			jw.emitStatement("Checker.assertEquals(%s, %s)", VAR_ENTITY, VAR_PERSISTED_ENTITY);
+			jw.emitEmptyLine();
+			
 			jw.endMethod();
 			jw.emitEmptyLine();
 
