@@ -12,6 +12,9 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Assert;
 
+import com.dbrage.lib.easyrs.client.provider.BasicAuthenticationProvider;
+import com.dbrage.lib.easyrs.client.provider.ClienResponseProvider;
+
 /**
  * The JaxRS client
  * 
@@ -32,6 +35,7 @@ public class Client<T> {
 
 	public Client() {
 		client = new ResteasyClientBuilder().build();
+		client.register(new ClienResponseProvider());
 	}
 
 	public Object getAll() {
@@ -109,6 +113,10 @@ public class Client<T> {
 
 	public void setEntities(Object entities) {
 		this.entities = entities;
+	}
+
+	public void setBasicAuthentication(String user, String password) {
+		client.register(new BasicAuthenticationProvider(user, password));
 	}
 
 }
