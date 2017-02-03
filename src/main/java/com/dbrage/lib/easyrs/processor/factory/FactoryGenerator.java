@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dbrage.lib.easyrs.arquillian.Container;
-import com.dbrage.lib.easyrs.client.Client;
+import com.dbrage.lib.easyrs.client.RestClient;
 import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
 import com.squareup.javawriter.JavaWriter;
 
@@ -159,7 +159,7 @@ public class FactoryGenerator {
 		classImports.add(Test.class.getCanonicalName());
 		classImports.add(InSequence.class.getCanonicalName());
 		classImports.add(Before.class.getCanonicalName());
-		classImports.add(Client.class.getCanonicalName());
+		classImports.add(RestClient.class.getCanonicalName());
 		
 		classImports.add(this.factory.getEntity().toString());
 	}
@@ -251,7 +251,7 @@ public class FactoryGenerator {
 	private void defineVariables() {
 		try {
 			// HTTP Client
-			String clientFormatedVariable = String.format("%s<%s>", Client.class.getSimpleName(), this.factory.getEntity());
+			String clientFormatedVariable = String.format("%s<%s>", RestClient.class.getSimpleName(), this.factory.getEntity());
 			jw.emitField(clientFormatedVariable, VAR_CLIENT, getCustomModifier(Modifier.PRIVATE));
 			
 			
@@ -264,7 +264,7 @@ public class FactoryGenerator {
 	private void initializeInstances() {
 		try {
 
-			jw.emitStatement(VAR_CLIENT + " = new %s<>()", Client.class.getSimpleName());
+			jw.emitStatement(VAR_CLIENT + " = new %s<>()", RestClient.class.getSimpleName());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
