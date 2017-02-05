@@ -1,21 +1,46 @@
 package com.dbrage.lib.easyrs.processor.enums;
 
-import com.dbrage.lib.easyrs.processor.factory.FactoryGenerator;
-
 /**
  * The requests available for testing the end points
+ * 
  * @see FactoryGenerator
  * @author Dorin_Brage
  */
 public enum ClientRequest {
 
-	GET,
+	ALL(1, "getAll"),
 
-	PUT,
+	GET(2, "getById"),
 
-	POST,
+	PUT(3, "create"),
 
-	DELETE,
+	POST(4, "update"),
 
-	ALL;
+	DELETE(5, "delete");
+
+	private int ordinal;
+
+	private String nameMethod;
+
+	private ClientRequest(int ordinal, String nameMethod) {
+		this.ordinal = ordinal;
+		this.nameMethod = nameMethod;
+	}
+
+	public int getOrdinal() {
+		return ordinal;
+	}
+
+	public void setOrdinal(int ordinal) {
+		this.ordinal = ordinal;
+	}
+
+	public String getNameMethod() {
+		return nameMethod;
+	}
+
+	public void setNameMethod(String nameMethod) {
+		this.nameMethod = nameMethod;
+	}
+
 }

@@ -9,13 +9,13 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 
-import com.dbrage.lib.easyrs.arquillian.enums.CrudOperation;
+import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
 
 /**
- * 
+ * Contains utilities for Arquillian 
  * @author Dorin_Brage
  *
- * @param <T>
+ * @param <T> the type of Dto
  */
 public abstract class Container<T> {
 
@@ -43,7 +43,7 @@ public abstract class Container<T> {
 
 	}
 
-	public Object getData(CrudOperation type)  {
+	public Object getData(ClientRequest type) {
 
 		String[] resourceName = Container.class.getSimpleName().split("Endpoint");
 		String jsonFile = resourceName[0] + ".json";
@@ -55,9 +55,13 @@ public abstract class Container<T> {
 		switch (type) {
 		case ALL:
 			break;
-		case CREATE:
+		case GET:
 			break;
-		case UPDATE:
+		case PUT:
+			break;
+		case POST:
+			break;
+		case DELETE:
 			break;
 		default:
 			break;
