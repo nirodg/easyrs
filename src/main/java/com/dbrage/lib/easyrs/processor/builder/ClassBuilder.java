@@ -5,8 +5,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.processing.Filer;
@@ -30,7 +32,7 @@ import com.dbrage.lib.easyrs.arquillian.Container;
 import com.dbrage.lib.easyrs.arquillian.utils.Checker;
 import com.dbrage.lib.easyrs.client.Client;
 import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
-import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
+import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 import com.dbrage.lib.easyrs.processor.enums.ProcessingError;
 import com.dbrage.lib.easyrs.processor.enums.StatementType;
 import com.dbrage.lib.easyrs.processor.exception.ProcessingException;
@@ -60,14 +62,10 @@ public class ClassBuilder {
 
 	private AnnotatedClass annotatedClass;
 
-	private Map<Integer, MethodBuilder> methods;
+	private Map<ClientOperation, MethodBuilder> methods;
 
 	private boolean isInitialized;
 	private boolean isMethodInitialized;
-
-	public ClassBuilder() {
-		methods = new HashMap<>();
-	}
 
 	/**
 	 * The {@code init() } initializes the builder
@@ -197,12 +195,14 @@ public class ClassBuilder {
 
 		TypeMirror entity = annotatedClass.getEntity();
 
+		methods = new HashMap<>();
+
 		// Get All's method
-		methods.put(ClientRequest.ALL.ordinal(),
-				new MethodBuilder(ClientRequest.ALL.getNameMethod())
+		methods.put(ClientOperation.GET_ALL,
+				new MethodBuilder(ClientOperation.GET_ALL.getNameMethod())
 						// Local Entities
 						.addStatements(StatementType.defineEntities.getValue(), entity,
-								StatementType.nameEntities.getValue(), entity, ClientRequest.ALL.name())
+								StatementType.nameEntities.getValue(), entity, ClientOperation.GET_ALL.name())
 						// Fetched Entities
 						.addStatements(StatementType.defineFetchEntities.getValue(), entity,
 								StatementType.nameFetchedEntities.getValue(), entity)
@@ -211,10 +211,10 @@ public class ClassBuilder {
 								StatementType.nameEntities.getValue(), StatementType.nameFetchedEntities.getValue()));
 
 		// Create's method
-		methods.put(ClientRequest.PUT.ordinal(), new MethodBuilder(ClientRequest.PUT.getNameMethod())
+		methods.put(ClientOperation.PUT, new MethodBuilder(ClientOperation.PUT.getNameMethod())
 				// Local entity
 				.addStatements(StatementType.defineEntity.getValue(), entity, StatementType.nameEntity.getValue(),
-						entity, ClientRequest.PUT.name())
+						entity, ClientOperation.PUT.name())
 				// Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
 				// Fetched Entity
@@ -227,10 +227,10 @@ public class ClassBuilder {
 						StatementType.nameFetchedEntity.getValue()));
 
 		// Update's method
-		methods.put(ClientRequest.POST.ordinal(), new MethodBuilder(ClientRequest.POST.getNameMethod())
+		methods.put(ClientOperation.POST, new MethodBuilder(ClientOperation.POST.getNameMethod())
 				// Local entity
 				.addStatements(StatementType.defineEntity.getValue(), entity, StatementType.nameEntity.getValue(),
-						entity, ClientRequest.POST.name())
+						entity, ClientOperation.POST.name())
 				// Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
 				// Fetched Entity
@@ -244,10 +244,10 @@ public class ClassBuilder {
 						StatementType.nameFetchedEntity.getValue()));
 
 		// Delete's method
-		methods.put(ClientRequest.DELETE.ordinal(), new MethodBuilder(ClientRequest.DELETE.getNameMethod())
+		methods.put(ClientOperation.DELETE, new MethodBuilder(ClientOperation.DELETE.getNameMethod())
 				// Local entity
 				.addStatements(StatementType.defineEntity.getValue(), entity, StatementType.nameEntity.getValue(),
-						entity, ClientRequest.DELETE.name())
+						entity, ClientOperation.DELETE.name())
 				// Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
 				// Delete entity
@@ -257,17 +257,27 @@ public class ClassBuilder {
 				// Assert Null
 				.addStatements(StatementType.defineAssertNull.getValue(), StatementType.nameFetchedEntity.getValue()));
 
-		
-		Map<Integer, MethodBuilder> tmpMethods = methods;
 
-		for (ClientRequest operation : annotatedClass.getTestOperations()) {
-			if(!tmpMethods.containsKey(operation.ordinal())){
-				tmpMethods.remove(operation.ordinal());
+		/*
+		 * If the operations's field is not specified or operations = {ClientOperation.GET} , by default will define all the methods. 
+		 * Otherwise will check those which are missing the they will be removed.
+		 */
+		
+		boolean isDefault = false;
+		
+		Map<ClientOperation, MethodBuilder> methodsToGenerate = new HashMap<>();
+		if( annotatedClass.getClientOperations()[0] != ClientOperation.ALL ){
+			
+			for (ClientOperation operation : annotatedClass.getClientOperations()) {
+				if(methods.containsKey(operation)){
+					methodsToGenerate.put(operation, methods.get(operation));
+				}
 			}
+			
+			// Clear the list of methods and assign those which were specified
+			methods.clear();
+			methods.putAll(methodsToGenerate);
 		}
-		
-		System.out.println("Total tests to be performed " +  tmpMethods.size());
-
 		
 		for (MethodBuilder method : methods.values()) {
 
@@ -283,7 +293,7 @@ public class ClassBuilder {
 			// removed
 			jw.emitSingleLineComment("TODO: Map an entity given the json file", null);
 			jw.emitSingleLineComment("TODO: Persist the mocked entity to have access to the GUID/ID", null);
-			
+
 			jw.emitEmptyLine();
 
 			for (String statement : method.getStatements()) {
@@ -418,10 +428,10 @@ public class ClassBuilder {
 
 		// Static classes
 		List<String> staticImports = new ArrayList<String>();
-		staticImports.add(ClientRequest.class.getCanonicalName() + "." + ClientRequest.ALL.name());
-		staticImports.add(ClientRequest.class.getCanonicalName() + "." + ClientRequest.PUT.name());
-		staticImports.add(ClientRequest.class.getCanonicalName() + "." + ClientRequest.POST.name());
-		staticImports.add(ClientRequest.class.getCanonicalName() + "." + ClientRequest.DELETE.name());
+		staticImports.add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.GET_ALL.name());
+		staticImports.add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.PUT.name());
+		staticImports.add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.POST.name());
+		staticImports.add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.DELETE.name());
 
 		try {
 			jw.emitImports(imports);

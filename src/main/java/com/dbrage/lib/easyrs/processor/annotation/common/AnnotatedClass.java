@@ -6,7 +6,7 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
-import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
+import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 
 /**
  * It reflects the annotated interface
@@ -20,7 +20,7 @@ public class AnnotatedClass {
 
 	private TypeMirror entity;
 	private TypeMirror endpoint;
-	private ClientRequest[] testOperations;
+	private ClientOperation[] clientOperations;
 
 	public AnnotatedClass(TypeElement annotatedClazz, EndpointTest annotation) {
 
@@ -50,7 +50,7 @@ public class AnnotatedClass {
 	}
 
 	private void getTestOperations(EndpointTest annotation) {
-		testOperations = annotation.operations();
+		clientOperations = annotation.operations();
 	}
 
 	public Name getQualifiedName() {
@@ -77,12 +77,12 @@ public class AnnotatedClass {
 		this.endpoint = endpoint;
 	}
 
-	public ClientRequest[] getTestOperations() {
-		return testOperations;
+	public ClientOperation[] getClientOperations() {
+		return clientOperations;
 	}
 
-	public void setTestOperations(ClientRequest[] testOperations) {
-		this.testOperations = testOperations;
+	public void setClientOperations(ClientOperation[] testOperations) {
+		this.clientOperations = testOperations;
 	}
 
 	public String getClassName() {

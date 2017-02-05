@@ -6,9 +6,11 @@ package com.dbrage.lib.easyrs.processor.enums;
  * @see FactoryGenerator
  * @author Dorin_Brage
  */
-public enum ClientRequest {
-
-	ALL(1, "getAll"),
+public enum ClientOperation {
+	
+	ALL(0, "ALL"),
+	
+	GET_ALL(1, "getAll"),
 
 	GET(2, "getById"),
 
@@ -22,7 +24,7 @@ public enum ClientRequest {
 
 	private String nameMethod;
 
-	private ClientRequest(int ordinal, String nameMethod) {
+	private ClientOperation(int ordinal, String nameMethod) {
 		this.ordinal = ordinal;
 		this.nameMethod = nameMethod;
 	}

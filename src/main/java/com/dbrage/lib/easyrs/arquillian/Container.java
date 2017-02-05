@@ -9,7 +9,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 
-import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
+import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 
 /**
  * Contains utilities for Arquillian 
@@ -43,7 +43,7 @@ public abstract class Container<T> {
 
 	}
 
-	public Object getData(ClientRequest type) {
+	public Object getData(ClientOperation type) {
 
 		String[] resourceName = Container.class.getSimpleName().split("Endpoint");
 		String jsonFile = resourceName[0] + ".json";
