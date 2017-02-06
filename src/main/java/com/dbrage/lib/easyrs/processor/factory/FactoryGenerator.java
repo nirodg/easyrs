@@ -22,10 +22,12 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dbrage.lib.easyrs.arquillian.Container;
+import com.dbrage.lib.easyrs.client.RestClient;
 import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
 import com.squareup.javawriter.JavaWriter;
 
@@ -36,10 +38,16 @@ import com.squareup.javawriter.JavaWriter;
  */
 public class FactoryGenerator {
 
+	private static final String VAR_CLIENT = "client";
+	private static final String VAR_PERSISTED_ENTITY = "persistedEntity";
+	private static final String VAR_PERSISTED_ENTITIES = "persistedEntities";
+
+
 	private static final String GENERATED_CLASS_SUFFIX = "TestEndpoint";
 
 	private static final String METHOD_VOID = "void";
 	private static final String METHOD_DEPLOYMENT = "deployment";
+	private static final String METHOD_SETUP = "setUp";
 	private static final String METHOD_GET_ALL = "getAll";
 	private static final String METHOD_CREATE = "create";
 	private static final String METHOD_UPDATE = "update";
@@ -54,6 +62,8 @@ public class FactoryGenerator {
 
 	private TypeElement annotatedClazz;
 
+	private FactoryClasses factory;
+	
 	public FactoryGenerator(Messager messager) {
 		this.messager = messager;
 	}
@@ -61,7 +71,8 @@ public class FactoryGenerator {
 	public void write(FactoryClasses factoryClasses, TypeElement annotatedClazz, Filer filer, Elements elements) {
 
 		this.annotatedClazz = annotatedClazz;
-
+		this.factory = factoryClasses;
+		
 		String name = factoryClasses.getQualifiedName().toString().concat(GENERATED_CLASS_SUFFIX);
 
 		setUpWriter(name, filer);
@@ -71,6 +82,10 @@ public class FactoryGenerator {
 		setRunWithArquillian();
 
 		startClass(name);
+		
+		defineVariables();
+
+		setSetUp();
 
 		setDeploymentMethod(factoryClasses.getClassName(), jw);
 
@@ -143,6 +158,10 @@ public class FactoryGenerator {
 		classImports.add(RunWith.class.getCanonicalName());
 		classImports.add(Test.class.getCanonicalName());
 		classImports.add(InSequence.class.getCanonicalName());
+		classImports.add(Before.class.getCanonicalName());
+		classImports.add(RestClient.class.getCanonicalName());
+		
+		classImports.add(this.factory.getEntity().toString());
 	}
 
 	private void createPackage(TypeElement annotatedClazz, Elements elements) {
@@ -208,6 +227,49 @@ public class FactoryGenerator {
 		} catch (IOException e) {
 			error(annotatedClazz, "Couldn't end the class for %s\n%s", annotatedClazz.getSimpleName(), e.getMessage());
 		}
+	}
+
+	private void setSetUp() {
+
+		Set<Modifier> modifiers = getCustomModifier(Modifier.PUBLIC);
+
+		try {
+			jw.emitAnnotation(Before.class);
+
+			jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
+			
+			initializeInstances();
+			
+			jw.endMethod();
+			jw.emitEmptyLine();
+
+		} catch (Exception e) {
+			error(annotatedClazz, "Couldn't define the setup\n %s", e.getMessage());
+		}
+	}
+
+	private void defineVariables() {
+		try {
+			// HTTP Client
+			String clientFormatedVariable = String.format("%s<%s>", RestClient.class.getSimpleName(), this.factory.getEntity());
+			jw.emitField(clientFormatedVariable, VAR_CLIENT, getCustomModifier(Modifier.PRIVATE));
+			
+			
+			jw.emitEmptyLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void initializeInstances() {
+		try {
+
+			jw.emitStatement(VAR_CLIENT + " = new %s<>()", RestClient.class.getSimpleName());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void setGetAllMethod() {

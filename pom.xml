@@ -95,6 +95,18 @@
 			<scope>compile</scope>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson-provider</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -133,5 +145,5 @@
 
 		</plugins>
 	</build>
-	
+
 </project>
