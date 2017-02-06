@@ -5,10 +5,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -31,7 +29,7 @@ import org.junit.runner.RunWith;
 
 import com.dbrage.lib.easyrs.arquillian.Container;
 import com.dbrage.lib.easyrs.arquillian.utils.Checker;
-import com.dbrage.lib.easyrs.client.Client;
+import com.dbrage.lib.easyrs.client.RestClient;
 import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 import com.dbrage.lib.easyrs.processor.enums.ProcessingError;
@@ -264,7 +262,7 @@ public class ClassBuilder {
 				// Delete entity
 				.addStatements(StatementType.defineDeleteEntity.getValue(), entity,
 						StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue(),
-						StatementType.nameEntity.getValue(), entity)
+						StatementType.nameEntity.getValue())
 				// Assert Null
 				.addStatements(StatementType.defineAssertNull.getValue(), StatementType.nameFetchedEntity.getValue()));
 
@@ -316,7 +314,7 @@ public class ClassBuilder {
 	private void setVariables() {
 		try {
 			/** The JaxRS Client */
-			jw.emitField(Client.class.getName(), VAR_CLIENT, getCustomModifier(Modifier.PRIVATE));
+			jw.emitField(RestClient.class.getName(), VAR_CLIENT, getCustomModifier(Modifier.PRIVATE));
 			jw.emitEmptyLine();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -360,7 +358,7 @@ public class ClassBuilder {
 			jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
 
 			/** Initializes the client */
-			jw.emitStatement(VAR_CLIENT + " = new %s()", Client.class.getSimpleName());
+			jw.emitStatement(VAR_CLIENT + " = new %s()", RestClient.class.getSimpleName());
 
 			jw.endMethod();
 			jw.emitEmptyLine();
@@ -424,7 +422,7 @@ public class ClassBuilder {
 		imports.add(Test.class.getCanonicalName());
 		imports.add(InSequence.class.getCanonicalName());
 		imports.add(Before.class.getCanonicalName());
-		imports.add(Client.class.getCanonicalName());
+		imports.add(RestClient.class.getCanonicalName());
 		imports.add(Assert.class.getCanonicalName());
 		imports.add(List.class.getCanonicalName());
 		imports.add(ArrayList.class.getCanonicalName());
