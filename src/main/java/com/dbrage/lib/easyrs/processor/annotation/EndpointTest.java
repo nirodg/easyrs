@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
+import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
@@ -15,6 +15,6 @@ public @interface EndpointTest {
 	
 	Class<?> entity();
 	
-	ClientRequest[] operations() default {ClientRequest.ALL};
+	ClientOperation[] operations() default {ClientOperation.ALL};
 	
 }

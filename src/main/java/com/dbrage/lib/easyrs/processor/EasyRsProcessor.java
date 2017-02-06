@@ -21,8 +21,8 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
-import com.dbrage.lib.easyrs.processor.factory.FactoryClasses;
-import com.dbrage.lib.easyrs.processor.factory.FactoryGenerator;
+import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
+import com.dbrage.lib.easyrs.processor.builder.ClassBuilder;
 import com.google.auto.service.AutoService;
 
 /**
@@ -35,15 +35,15 @@ import com.google.auto.service.AutoService;
 public class EasyRsProcessor extends AbstractProcessor {
 
 	private Types typeUtils;
-	private Elements elementUtils;
+	private Elements elements;
 	private Filer filer;
 	private Messager messager;
 
-	/** Will contain all the classes annotated with EndpointTest*/
-	private Map<String, FactoryClasses> container;
+	/** Will contain all the classes annotated with EndpointTest */
+	private Map<String, AnnotatedClass> container;
 
-	/** The Generator factory*/
-	private FactoryGenerator generator;
+	/** The Generator factory */
+	private ClassBuilder generator;
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -62,16 +62,20 @@ public class EasyRsProcessor extends AbstractProcessor {
 				System.err.println("New class found with EASYRS Annotation");
 
 				container.put(annotatedClazz.getSimpleName().toString(),
-						new FactoryClasses(annotatedClazz, element.getAnnotation(EndpointTest.class)));
+						new AnnotatedClass(annotatedClazz, element.getAnnotation(EndpointTest.class)));
 
 			} else {
 				error(element, "%s it can't be generated twice", annotatedClazz.getSimpleName().toString());
 				return true;
 			}
 
-			// Start generating the file
-			generator.write(container.get(annotatedClazz.getSimpleName().toString()), annotatedClazz, filer,
-					elementUtils);
+			try {
+				generator
+						.init(annotatedClazz, container.get(annotatedClazz.getSimpleName().toString()), filer, elements)
+						.build();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		}
 
@@ -82,12 +86,15 @@ public class EasyRsProcessor extends AbstractProcessor {
 	public synchronized void init(ProcessingEnvironment processingEnv) {
 		super.init(processingEnv);
 		typeUtils = processingEnv.getTypeUtils();
-		elementUtils = processingEnv.getElementUtils();
+		elements = processingEnv.getElementUtils();
 		filer = processingEnv.getFiler();
 		messager = processingEnv.getMessager();
 
-		container = new HashMap<String, FactoryClasses>();
-		generator = new FactoryGenerator(messager);
+		container = new HashMap<String, AnnotatedClass>();
+
+		/** Old generator, being refactored **/
+		// oldGenerator = new FactoryGenerator(messager);
+		generator = new ClassBuilder();
 	}
 
 	@Override
@@ -100,8 +107,11 @@ public class EasyRsProcessor extends AbstractProcessor {
 	/**
 	 * Checks if the annotation was used only by interfaces
 	 * 
-	 * @param element Represents a program element such as a package, class, or method
-	 * @return {@code true} if the element is an {@code Interface}, {@code false} is it's not
+	 * @param element
+	 *            Represents a program element such as a package, class, or
+	 *            method
+	 * @return {@code true} if the element is an {@code Interface},
+	 *         {@code false} is it's not
 	 */
 	private boolean isOnlyInterfaceAnnotated(Element element) {
 		if (element.getKind().equals(ElementKind.INTERFACE)) {
@@ -110,12 +120,18 @@ public class EasyRsProcessor extends AbstractProcessor {
 		error(element, "Only interfaces can be annotated with @%s", EndpointTest.class.getName());
 		return false;
 	}
-	
+
 	/**
 	 * If an error occurs is shown during the process
-	 * @param element Represents a program element such as a package, class, or method
-	 * @param string The formated message
-	 * @param args Arguments referenced by the format specifiers in the format string
+	 * 
+	 * @param element
+	 *            Represents a program element such as a package, class, or
+	 *            method
+	 * @param string
+	 *            The formated message
+	 * @param args
+	 *            Arguments referenced by the format specifiers in the format
+	 *            string
 	 */
 	private void error(Element element, String string, Object... args) {
 		messager.printMessage(Kind.ERROR, String.format(string, args), element);

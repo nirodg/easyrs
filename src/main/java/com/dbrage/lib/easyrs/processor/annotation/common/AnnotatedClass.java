@@ -1,4 +1,4 @@
-package com.dbrage.lib.easyrs.processor.factory;
+package com.dbrage.lib.easyrs.processor.annotation.common;
 
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
@@ -6,18 +6,23 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
-import com.dbrage.lib.easyrs.processor.enums.ClientRequest;
+import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 
-public class FactoryClasses {
+/**
+ * It reflects the annotated interface
+ * 
+ * @author Dorin Brage
+ */
+public class AnnotatedClass {
 
 	private Name qualifiedName;
 	private String className;
 
 	private TypeMirror entity;
 	private TypeMirror endpoint;
-	private ClientRequest[] testOperations;
+	private ClientOperation[] clientOperations;
 
-	public FactoryClasses(TypeElement annotatedClazz, EndpointTest annotation) {
+	public AnnotatedClass(TypeElement annotatedClazz, EndpointTest annotation) {
 
 		this.qualifiedName = annotatedClazz.getQualifiedName();
 		this.className = annotatedClazz.getSimpleName().toString();
@@ -45,12 +50,7 @@ public class FactoryClasses {
 	}
 
 	private void getTestOperations(EndpointTest annotation) {
-		try {
-			testOperations = annotation.operations();
-		} catch (MirroredTypeException e) {
-			// crudOperations = e.getTypeMirror();
-		}
-
+		clientOperations = annotation.operations();
 	}
 
 	public Name getQualifiedName() {
@@ -77,12 +77,12 @@ public class FactoryClasses {
 		this.endpoint = endpoint;
 	}
 
-	public ClientRequest[] getTestOperations() {
-		return testOperations;
+	public ClientOperation[] getClientOperations() {
+		return clientOperations;
 	}
 
-	public void setTestOperations(ClientRequest[] testOperations) {
-		this.testOperations = testOperations;
+	public void setClientOperations(ClientOperation[] testOperations) {
+		this.clientOperations = testOperations;
 	}
 
 	public String getClassName() {
@@ -92,6 +92,5 @@ public class FactoryClasses {
 	public void setClassName(String className) {
 		this.className = className;
 	}
-	
 
 }
