@@ -300,12 +300,6 @@ public class ClassBuilder {
 
 			jw.beginMethod(method.getTypeMethod(), method.getName(), method.getModifiers(), null, null);
 
-			// TODO: Once implemented the followed functions this must be
-			// removed
-			jw.emitSingleLineComment("TODO: Map an entity given the json file", null);
-
-			jw.emitEmptyLine();
-
 			for (String statement : method.getStatements()) {
 				jw.emitStatement(statement, null);
 			}
