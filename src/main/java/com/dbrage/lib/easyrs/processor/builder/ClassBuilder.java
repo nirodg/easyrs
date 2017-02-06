@@ -218,7 +218,7 @@ public class ClassBuilder {
 						entity, ClientOperation.PUT.name())
 				// Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
-				// Fetched Entity
+				// Persist entity
 				.addStatements(StatementType.defineCreateEntity.getValue(), entity,
 						StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue())
 				// Assert Not Null
@@ -233,6 +233,11 @@ public class ClassBuilder {
 				.addStatements(StatementType.defineEntity.getValue(), entity, StatementType.nameEntity.getValue(),
 						entity, ClientOperation.POST.name())
 				// Assert Not Null
+				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
+        // Persist entity
+        .addStatements(StatementType.definePersistEntity.getValue(), StatementType.nameEntity.getValue(), 
+        		entity, StatementType.nameEntity.getValue())
+        // Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
 				// Fetched Entity
 				.addStatements(StatementType.defineUpdateEntity.getValue(), entity,
@@ -250,6 +255,11 @@ public class ClassBuilder {
 				.addStatements(StatementType.defineEntity.getValue(), entity, StatementType.nameEntity.getValue(),
 						entity, ClientOperation.DELETE.name())
 				// Assert Not Null
+				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
+				 // Persist entity
+        .addStatements(StatementType.definePersistEntity.getValue(), StatementType.nameEntity.getValue(), 
+        		entity, StatementType.nameEntity.getValue())
+        // Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
 				// Delete entity
 				.addStatements(StatementType.defineDeleteEntity.getValue(), entity,
@@ -293,7 +303,6 @@ public class ClassBuilder {
 			// TODO: Once implemented the followed functions this must be
 			// removed
 			jw.emitSingleLineComment("TODO: Map an entity given the json file", null);
-			jw.emitSingleLineComment("TODO: Persist the mocked entity to have access to the GUID/ID", null);
 
 			jw.emitEmptyLine();
 
