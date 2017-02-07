@@ -9,23 +9,55 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 
+import com.dbrage.lib.easyrs.client.RestClient;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 
 /**
- * Contains utilities for Arquillian 
+ * Contains utilities
+ * 
  * @author Dorin_Brage
  *
  * @param <T> the type of Dto
  */
 public abstract class Container<T> {
 
+	private final static String CLIENT_HOST = "http://localhost/";
+	private final static String SYSPROP_CLIENT_HOST = "client.host";
+	private final static String SYSPROP_CLIENT_USER = "client.user";
+	private final static String SYSPROP_CLIENT_PASS = "client.pass";
+	
 	/** Used to access the resource folder for the given Class */
 	public Class<T> resourcePath;
+	
+	/** The JaxRs client */
+	private RestClient client;
 
 	@SuppressWarnings("unchecked")
 	public Container() {
 		this.resourcePath = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
 				.getActualTypeArguments()[0];
+		
+		initializeJaxRsClient();
+	}
+
+	/**
+	 * Initializes the JaxRs client
+	 */
+	private void initializeJaxRsClient() {
+		this.client = new RestClient();
+		
+		// Set the host
+		if(System.getProperty(SYSPROP_CLIENT_HOST) == null){
+			this.client.setEndpoint(CLIENT_HOST);
+		}else{
+			this.client.setEndpoint(System.getProperty(SYSPROP_CLIENT_HOST));
+		}
+		
+		// Set authentication
+		if(System.getProperty(SYSPROP_CLIENT_USER) != null || System.getProperty(SYSPROP_CLIENT_PASS) != null){
+			client.setBasicAuthentication(System.getProperty(SYSPROP_CLIENT_USER), System.getProperty(SYSPROP_CLIENT_PASS));
+		}
+		
 	}
 
 	/**
@@ -70,6 +102,20 @@ public abstract class Container<T> {
 	}
 
 	/**
+	 * @return the client
+	 */
+	public RestClient getClient() {
+		return client;
+	}
+
+	/**
+	 * @param client the client to set
+	 */
+	public void setClient(RestClient client) {
+		this.client = client;
+	}
+
+	/**
 	 * For each test will be printed either the test started, passed
 	 * successfully or it failed.
 	 */
@@ -84,12 +130,12 @@ public abstract class Container<T> {
 		@Override
 		protected void finished(org.junit.runner.Description description) {
 			System.out.println(
-					"---- successful test case: " + description.getClassName() + "." + description.getMethodName());
+					"---- finished test case: " + description.getClassName() + "." + description.getMethodName());
 		};
 
 		@Override
 		protected void failed(Throwable e, org.junit.runner.Description description) {
-			System.out.println("---- failed test case: " + description.getClassName() + "."
+			System.err.println("---- failed test case: " + description.getClassName() + "."
 					+ description.getMethodName() + " response: " + e.getMessage());
 		};
 	};

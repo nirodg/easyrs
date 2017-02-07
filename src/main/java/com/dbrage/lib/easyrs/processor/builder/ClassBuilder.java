@@ -49,7 +49,7 @@ public class ClassBuilder {
 	private static final String METHOD_DEPLOYMENT = "deployment";
 	private static final String METHOD_VOID = "void";
 	private static final String METHOD_SETUP = "setUp";
-	private static final String VAR_CLIENT = "client";
+	private static final String VAR_CLIENT = "getClient(%s)";
 
 	private Elements elements;
 	private TypeElement typeAnnotatedClazz;
@@ -314,8 +314,7 @@ public class ClassBuilder {
 	private void setVariables() {
 		try {
 			/** The JaxRS Client */
-			jw.emitField(RestClient.class.getName(), VAR_CLIENT, getCustomModifier(Modifier.PRIVATE));
-			jw.emitEmptyLine();
+			jw.emitSingleLineComment("Here you can define your global variables", null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -357,8 +356,7 @@ public class ClassBuilder {
 
 			jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
 
-			/** Initializes the client */
-			jw.emitStatement(VAR_CLIENT + " = new %s()", RestClient.class.getSimpleName());
+			jw.emitSingleLineComment("Here you can initialize your variables", null);
 
 			jw.endMethod();
 			jw.emitEmptyLine();

@@ -17,15 +17,15 @@ public enum StatementType {
 
 	/* Entity */
 	defineEntity("%s %s = (%s) getData(%s)"),
-	defineGetById("%s %s = (%s) client.getById(%s)"),
-	defineCreateEntity("%s %s = (%s) client.put(%s)"),
-	defineUpdateEntity("%s %s = (%s) client.post(%s.getGuid(), %s)"),
-	defineDeleteEntity("%s %s = (%s) client.delete(%s.getGuid())"),
-	definePersistEntity("%s = (%s) client.put(%s)"),
+	defineGetById("%s %s = (%s) getClient().getById(%s)"),
+	defineCreateEntity("%s %s = (%s) getClient().put(%s)"),
+	defineUpdateEntity("%s %s = (%s) getClient().post(%s.getGuid(), %s)"),
+	defineDeleteEntity("%s %s = (%s) getClient().delete(%s.getGuid())"),
+	definePersistEntity("%s = (%s) getClient().put(%s)"),
 	
 	/* Entities*/ 
 	defineEntities("List<%s> %s = (ArrayList<%s>) getData(%s)"),
-	defineFetchEntities("List<%s> %s = (ArrayList<%s>) client.getAll()"),
+	defineFetchEntities("List<%s> %s = (ArrayList<%s>) getClient().getAll()"),
 	
 	/* Asserts */
 	defineAssertNull("Assert.assertNull(%s)"),
