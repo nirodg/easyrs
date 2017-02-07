@@ -91,9 +91,6 @@ public class EasyRsProcessor extends AbstractProcessor {
 		messager = processingEnv.getMessager();
 
 		container = new HashMap<String, AnnotatedClass>();
-
-		/** Old generator, being refactored **/
-		// oldGenerator = new FactoryGenerator(messager);
 		generator = new ClassBuilder();
 	}
 
