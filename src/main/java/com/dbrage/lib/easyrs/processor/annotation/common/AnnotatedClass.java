@@ -7,6 +7,7 @@ import javax.lang.model.type.TypeMirror;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
+import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 
 /**
  * It reflects the annotated interface
@@ -21,16 +22,18 @@ public class AnnotatedClass {
 	private TypeMirror entity;
 	private TypeMirror endpoint;
 	private ClientOperation[] clientOperations;
+	private UUIDIdentifier identifier;
 
 	public AnnotatedClass(TypeElement annotatedClazz, EndpointTest annotation) {
 
 		this.qualifiedName = annotatedClazz.getQualifiedName();
 		this.className = annotatedClazz.getSimpleName().toString();
+		this.clientOperations = annotation.operations();
+		this.identifier = annotation.identifier();
 
 		getEntityFieldAnnotation(annotation);
 		getEndpointFieldAnnotation(annotation);
-		getTestOperations(annotation);
-
+		
 	}
 
 	private void getEntityFieldAnnotation(EndpointTest annotation) {
@@ -47,10 +50,6 @@ public class AnnotatedClass {
 		} catch (MirroredTypeException e) {
 			endpoint = e.getTypeMirror();
 		}
-	}
-
-	private void getTestOperations(EndpointTest annotation) {
-		clientOperations = annotation.operations();
 	}
 
 	public Name getQualifiedName() {
@@ -91,6 +90,14 @@ public class AnnotatedClass {
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public UUIDIdentifier getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(UUIDIdentifier identifier) {
+		this.identifier = identifier;
 	}
 
 }

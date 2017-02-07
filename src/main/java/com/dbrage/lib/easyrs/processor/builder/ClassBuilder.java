@@ -240,7 +240,7 @@ public class ClassBuilder {
 				// Fetched Entity
 				.addStatements(StatementType.defineUpdateEntity.getValue(), entity,
 						StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue(),
-						StatementType.nameEntity.getValue())
+						annotatedClass.getIdentifier().getValue(), StatementType.nameEntity.getValue())
 				// Assert Not Null
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameFetchedEntity.getValue())
 				// Assert Equal
@@ -261,8 +261,8 @@ public class ClassBuilder {
 				.addStatements(StatementType.defineAssertNotNull.getValue(), StatementType.nameEntity.getValue())
 				// Delete entity
 				.addStatements(StatementType.defineDeleteEntity.getValue(), entity,
-						StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue(),
-						StatementType.nameEntity.getValue())
+						StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue(), 
+						annotatedClass.getIdentifier().getValue())
 				// Assert Null
 				.addStatements(StatementType.defineAssertNull.getValue(), StatementType.nameFetchedEntity.getValue()));
 

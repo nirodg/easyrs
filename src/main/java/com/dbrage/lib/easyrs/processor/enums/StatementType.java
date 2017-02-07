@@ -19,8 +19,8 @@ public enum StatementType {
 	defineEntity("%s %s = (%s) getData(%s)"),
 	defineGetById("%s %s = (%s) getClient().getById(%s)"),
 	defineCreateEntity("%s %s = (%s) getClient().put(%s)"),
-	defineUpdateEntity("%s %s = (%s) getClient().post(%s.getGuid(), %s)"),
-	defineDeleteEntity("%s %s = (%s) getClient().delete(%s.getGuid())"),
+	defineUpdateEntity("%s %s = (%s) getClient().post(%s.%s, %s)"),
+	defineDeleteEntity("%s %s = (%s) getClient().delete(%s.%s)"),
 	definePersistEntity("%s = (%s) getClient().put(%s)"),
 	
 	/* Entities*/ 
