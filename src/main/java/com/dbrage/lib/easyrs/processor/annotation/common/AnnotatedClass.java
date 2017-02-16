@@ -7,6 +7,7 @@ import javax.lang.model.type.TypeMirror;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
+import com.dbrage.lib.easyrs.processor.enums.ExecutionMode;
 import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 
 /**
@@ -23,6 +24,7 @@ public class AnnotatedClass {
 	private TypeMirror endpoint;
 	private ClientOperation[] clientOperations;
 	private UUIDIdentifier identifier;
+	private ExecutionMode executionMode;
 
 	public AnnotatedClass(TypeElement annotatedClazz, EndpointTest annotation) {
 
@@ -30,6 +32,7 @@ public class AnnotatedClass {
 		this.className = annotatedClazz.getSimpleName().toString();
 		this.clientOperations = annotation.operations();
 		this.identifier = annotation.identifier();
+		this.executionMode = annotation.execution();
 
 		getEntityFieldAnnotation(annotation);
 		getEndpointFieldAnnotation(annotation);
@@ -98,6 +101,14 @@ public class AnnotatedClass {
 
 	public void setIdentifier(UUIDIdentifier identifier) {
 		this.identifier = identifier;
+	}
+
+	public ExecutionMode getExecutionMode() {
+		return executionMode;
+	}
+
+	public void setExecutionMode(ExecutionMode executionMode) {
+		this.executionMode = executionMode;
 	}
 
 }

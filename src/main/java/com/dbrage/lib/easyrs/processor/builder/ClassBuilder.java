@@ -28,10 +28,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dbrage.lib.easyrs.arquillian.Container;
-import com.dbrage.lib.easyrs.arquillian.utils.Checker;
-import com.dbrage.lib.easyrs.client.RestClient;
 import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
+import com.dbrage.lib.easyrs.processor.enums.ExecutionMode;
 import com.dbrage.lib.easyrs.processor.enums.ProcessingError;
 import com.dbrage.lib.easyrs.processor.enums.StatementType;
 import com.dbrage.lib.easyrs.processor.exception.ProcessingException;
@@ -127,8 +126,11 @@ public class ClassBuilder {
 		String extendedContainer = String.format("%s<%s>", Container.class.getName(), annotatedClass.getEntity());
 
 		try {
-
-			jw.emitAnnotation(RunWith.class, Arquillian.class.getSimpleName().concat(".class"));
+			
+			if(annotatedClass.getExecutionMode().equals(ExecutionMode.ARQUILLIAN)){
+				jw.emitAnnotation(RunWith.class, Arquillian.class.getSimpleName().concat(".class"));				
+			}
+			
 			jw.emitAnnotation(SuppressWarnings.class, "\"unchecked\"");
 
 			jw.beginType(this.finalGeneratedClass, "class", getCustomModifier(Modifier.PUBLIC),
@@ -294,7 +296,9 @@ public class ClassBuilder {
 			sequence++;
 
 			jw.emitAnnotation(Test.class);
-			jw.emitAnnotation(InSequence.class, sequence);
+			if(annotatedClass.getExecutionMode().equals(ExecutionMode.ARQUILLIAN)){				
+				jw.emitAnnotation(InSequence.class, sequence);
+			}
 
 			jw.beginMethod(method.getTypeMethod(), method.getName(), method.getModifiers(), null, null);
 
@@ -392,7 +396,9 @@ public class ClassBuilder {
 
 		setBefore();
 
-		setDeploymentMethod();
+		if(annotatedClass.getExecutionMode().equals(ExecutionMode.ARQUILLIAN)){			
+			setDeploymentMethod();
+		}
 
 		setMethods();
 
@@ -413,18 +419,19 @@ public class ClassBuilder {
 		List<String> imports = new ArrayList<String>();
 
 		imports.add(Container.class.getCanonicalName());
-		imports.add(WebArchive.class.getCanonicalName());
-		imports.add(Deployment.class.getCanonicalName());
-		imports.add(Arquillian.class.getCanonicalName());
-		imports.add(RunWith.class.getCanonicalName());
 		imports.add(Test.class.getCanonicalName());
-		imports.add(InSequence.class.getCanonicalName());
 		imports.add(Before.class.getCanonicalName());
-		imports.add(RestClient.class.getCanonicalName());
 		imports.add(Assert.class.getCanonicalName());
 		imports.add(List.class.getCanonicalName());
 		imports.add(ArrayList.class.getCanonicalName());
-		imports.add(Checker.class.getCanonicalName());
+		
+		if(annotatedClass.getExecutionMode().equals(ExecutionMode.ARQUILLIAN)){
+			imports.add(Deployment.class.getCanonicalName());
+			imports.add(Arquillian.class.getCanonicalName());
+			imports.add(InSequence.class.getCanonicalName());
+			imports.add(WebArchive.class.getCanonicalName());
+			imports.add(RunWith.class.getCanonicalName());
+		}
 
 		// Static classes
 		List<String> staticImports = new ArrayList<String>();
