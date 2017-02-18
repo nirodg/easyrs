@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 
 import com.dbrage.lib.easyrs.client.RestClient;
-import com.dbrage.lib.easyrs.processor.annotation.common.DtoData;
+import com.dbrage.lib.easyrs.data.DtoData;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;

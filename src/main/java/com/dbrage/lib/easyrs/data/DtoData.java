@@ -1,4 +1,4 @@
-package com.dbrage.lib.easyrs.processor.annotation.common;
+package com.dbrage.lib.easyrs.data;
 
 import com.google.gson.internal.LinkedTreeMap;
 
