@@ -15,7 +15,10 @@ public enum ProcessingError {
 	SET_INIT_CLASS("Couldn't start writing the class for %s\n%s"), 
 	SET_END_CLASS("Couldn't close the class for %s\n%s"), 
 	SET_DEPLOYMENT_METHOD("Couldn't setup the deployment menthod for %s\n%s"), 
-	SET_BEFORE_METHOD("Couldn't define the Before's method\n %s");
+	SET_BEFORE_METHOD("Couldn't define the Before's method\n %s"),
+	PROCESSOR_ONLY_INTERFACES("Only interfaces can be annotated with @%s"), 
+	PROCESSOR_ERROR_GENERATING("Error generating the class"), 
+	CLASS_CANT_BE_DUPLICATED("%s it can't be generated twice");
 	
 	private String value;
 

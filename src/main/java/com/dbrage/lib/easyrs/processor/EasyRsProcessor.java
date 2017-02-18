@@ -17,27 +17,26 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
 import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
 import com.dbrage.lib.easyrs.processor.builder.ClassBuilder;
+import com.dbrage.lib.easyrs.processor.enums.ProcessingError;
+import com.dbrage.lib.easyrs.processor.exception.ProcessingException;
 import com.google.auto.service.AutoService;
 
 /**
  * The Processor
  * 
- * @author Dorin_Brage
+ * @author Dorin Brage
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class EasyRsProcessor extends AbstractProcessor {
 
-	private Types typeUtils;
 	private Elements elements;
 	private Filer filer;
-	private Messager messager;
 
 	/** Will contain all the classes annotated with EndpointTest */
 	private Map<String, AnnotatedClass> container;
@@ -48,48 +47,47 @@ public class EasyRsProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
-		// Iterate over each class
-		for (Element element : roundEnv.getElementsAnnotatedWith(EndpointTest.class)) {
+		try {
+			// Iterate over each class
+			for (Element element : roundEnv.getElementsAnnotatedWith(EndpointTest.class)) {
 
-			// Looks for interfaces with IndependentTest.class
-			isOnlyInterfaceAnnotated(element);
+				// Looks for interfaces with IndependentTest.class
+				isOnlyInterfaceAnnotated(element);
 
-			// The class with the annotation to be tested
-			TypeElement annotatedClazz = (TypeElement) element;
+				// The class with the annotation to be tested
+				TypeElement annotatedClazz = (TypeElement) element;
 
-			// It checks to do not generate the class twice
-			if (!container.containsKey(annotatedClazz.getSimpleName().toString())) {
-				System.err.println("New class found with EASYRS Annotation");
+				// It checks to do not generate the class twice
+				if (!container.containsKey(annotatedClazz.getSimpleName().toString())) {
+					System.err.println("New class found with EASYRS Annotation");
 
-				container.put(annotatedClazz.getSimpleName().toString(),
-						new AnnotatedClass(annotatedClazz, element.getAnnotation(EndpointTest.class)));
+					container.put(annotatedClazz.getSimpleName().toString(),
+							new AnnotatedClass(annotatedClazz, element.getAnnotation(EndpointTest.class)));
 
-			} else {
-				error(element, "%s it can't be generated twice", annotatedClazz.getSimpleName().toString());
-				return true;
+				} else {
+					throw new ProcessingException(element, ProcessingError.CLASS_CANT_BE_DUPLICATED,
+							annotatedClazz.getSimpleName().toString());
+				}
+
+				try {
+					generator.init(annotatedClazz, container.get(annotatedClazz.getSimpleName().toString()), filer,
+							elements).build();
+				} catch (Exception e) {
+					throw new ProcessingException(element, ProcessingError.PROCESSOR_ERROR_GENERATING);
+				}
+
 			}
-
-			try {
-				generator
-						.init(annotatedClazz, container.get(annotatedClazz.getSimpleName().toString()), filer, elements)
-						.build();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+		} catch (ProcessingException e) {
+			e.printStackTrace();
 		}
-
 		return true;
 	}
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
 		super.init(processingEnv);
-		typeUtils = processingEnv.getTypeUtils();
 		elements = processingEnv.getElementUtils();
 		filer = processingEnv.getFiler();
-		messager = processingEnv.getMessager();
-
 		container = new HashMap<String, AnnotatedClass>();
 		generator = new ClassBuilder();
 	}
@@ -109,29 +107,14 @@ public class EasyRsProcessor extends AbstractProcessor {
 	 *            method
 	 * @return {@code true} if the element is an {@code Interface},
 	 *         {@code false} is it's not
+	 * @throws ProcessingException
 	 */
-	private boolean isOnlyInterfaceAnnotated(Element element) {
-		if (element.getKind().equals(ElementKind.INTERFACE)) {
-			return true;
+	private boolean isOnlyInterfaceAnnotated(Element element) throws ProcessingException {
+		if (!element.getKind().equals(ElementKind.INTERFACE)) {
+			throw new ProcessingException(element, ProcessingError.PROCESSOR_ONLY_INTERFACES,
+					EndpointTest.class.getName());
 		}
-		error(element, "Only interfaces can be annotated with @%s", EndpointTest.class.getName());
-		return false;
+		return true;
 	}
 
-	/**
-	 * If an error occurs is shown during the process
-	 * 
-	 * @param element
-	 *            Represents a program element such as a package, class, or
-	 *            method
-	 * @param string
-	 *            The formated message
-	 * @param args
-	 *            Arguments referenced by the format specifiers in the format
-	 *            string
-	 */
-	private void error(Element element, String string, Object... args) {
-		messager.printMessage(Kind.ERROR, String.format(string, args), element);
-		System.err.println(String.format(string, args));
-	}
 }

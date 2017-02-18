@@ -13,7 +13,7 @@ import com.dbrage.lib.easyrs.client.provider.ClienResponseProvider;
 /**
  * The Client
  * 
- * @author Dorin_Brage
+ * @author Dorin Brage
  *
  */
 public class Client {

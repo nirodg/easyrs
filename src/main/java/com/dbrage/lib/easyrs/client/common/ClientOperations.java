@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 /**
  * The Client Operations interface reflects the CRUD operations.
  * 
- * @author Dorin_Brage
+ * @author Dorin Brage
  */
 public interface ClientOperations {
 

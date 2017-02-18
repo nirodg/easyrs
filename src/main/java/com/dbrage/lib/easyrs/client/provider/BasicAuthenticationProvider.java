@@ -11,7 +11,7 @@ import javax.xml.bind.DatatypeConverter;
 /**
  * The Authenticator Provider
  * 
- * @author Dorin_Brage
+ * @author Dorin Brage
  */
 @Provider
 public class BasicAuthenticationProvider implements ClientRequestFilter {

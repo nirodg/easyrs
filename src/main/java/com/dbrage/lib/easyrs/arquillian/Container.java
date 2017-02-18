@@ -23,7 +23,7 @@ import com.google.gson.internal.LinkedTreeMap;
 /**
  * Contains utilities
  * 
- * @author Dorin_Brage
+ * @author Dorin Brage
  *
  * @param <T>
  *            the type of Dto

@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 /**
  * The Client Response Provider
  * 
- * @author Dorin_Brage
+ * @author Dorin Brage
  */
 @Provider
 public class ClienResponseProvider implements ClientResponseFilter {
