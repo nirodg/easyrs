@@ -59,11 +59,8 @@ public class EasyRsProcessor extends AbstractProcessor {
 
 				// It checks to do not generate the class twice
 				if (!container.containsKey(annotatedClazz.getSimpleName().toString())) {
-					System.err.println("New class found with EASYRS Annotation");
-
 					container.put(annotatedClazz.getSimpleName().toString(),
 							new AnnotatedClass(annotatedClazz, element.getAnnotation(EndpointTest.class)));
-
 				} else {
 					throw new ProcessingException(element, ProcessingError.CLASS_CANT_BE_DUPLICATED,
 							annotatedClazz.getSimpleName().toString());
