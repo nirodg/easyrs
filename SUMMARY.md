@@ -2,5 +2,5 @@
 
 * [Introduction](README.md)
 * [Setup](setup.md)
-* Hands on
+* [Testing your endpoint](testingendpoint.md)
 
