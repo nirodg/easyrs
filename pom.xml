@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.dbrage.lib</groupId>
-	<artifactId>easyrs-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>easyrs</artifactId>
+	<version>0.0.1</version>
 
 	<properties>
 		<easyrs.test.folder>easyrs-tests</easyrs.test.folder>
@@ -80,7 +80,7 @@
 			<artifactId>arquillian-junit-container</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -129,8 +129,26 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>1.8.1</version>
+				<configuration>
+					<tag>${project.artifactId}-${project.version}</tag>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
+	<scm>
+		<developerConnection>Dorin Gheorghe Brage</developerConnection>
+		<connection>scm:git:https://github.com/nirodg/easyrs</connection>
+	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<url>https://github.com/nirodg/easyrs</url>
+		</repository>
+	</distributionManagement>
+	
 </project>
