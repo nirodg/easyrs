@@ -7,42 +7,42 @@ package com.dbrage.lib.easyrs.processor.enums;
  * @author Dorin Brage
  */
 public enum ClientOperation {
-	
-	ALL(0, "ALL"),
-	
-	GET_ALL(1, "getAll"),
 
-	GET(2, "getById"),
+  ALL(0, "ALL"),
 
-	PUT(3, "create"),
+  GET_ALL(1, "getAll"),
 
-	POST(4, "update"),
+  GET(2, "getById"),
 
-	DELETE(5, "delete");
+  PUT(3, "create"),
 
-	private int ordinal;
+  POST(4, "update"),
 
-	private String nameMethod;
+  DELETE(5, "delete");
 
-	private ClientOperation(int ordinal, String nameMethod) {
-		this.ordinal = ordinal;
-		this.nameMethod = nameMethod;
-	}
+  private int ordinal;
 
-	public int getOrdinal() {
-		return ordinal;
-	}
+  private String nameMethod;
 
-	public void setOrdinal(int ordinal) {
-		this.ordinal = ordinal;
-	}
+  private ClientOperation(int ordinal, String nameMethod) {
+    this.ordinal = ordinal;
+    this.nameMethod = nameMethod;
+  }
 
-	public String getNameMethod() {
-		return nameMethod;
-	}
+  public int getOrdinal() {
+    return ordinal;
+  }
 
-	public void setNameMethod(String nameMethod) {
-		this.nameMethod = nameMethod;
-	}
+  public void setOrdinal(int ordinal) {
+    this.ordinal = ordinal;
+  }
+
+  public String getNameMethod() {
+    return nameMethod;
+  }
+
+  public void setNameMethod(String nameMethod) {
+    this.nameMethod = nameMethod;
+  }
 
 }

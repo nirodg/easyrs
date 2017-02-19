@@ -9,48 +9,43 @@ import java.util.LinkedHashMap;
  */
 public interface ClientOperations {
 
-	/**
-	 * Returns the persisted entities
-	 * 
-	 * @return the list of entities as {@link LinkedHashMap}
-	 */
-	Object getAll();
+  /**
+   * Returns the persisted entities
+   * 
+   * @return the list of entities as {@link LinkedHashMap}
+   */
+  Object getAll();
 
-	/**
-	 * Return the persisted object
-	 * 
-	 * @param id
-	 *          the ID or GUID
-	 * @return the {@link Object}
-	 */
-	Object getById(String id);
+  /**
+   * Return the persisted object
+   * 
+   * @param id the ID or GUID
+   * @return the {@link Object}
+   */
+  Object getById(String id);
 
-	/**
-	 * Insert the given entity
-	 * 
-	 * @param object
-	 *          the entity
-	 * @return the persisted entity
-	 */
-	Object put(Object object);
+  /**
+   * Insert the given entity
+   * 
+   * @param object the entity
+   * @return the persisted entity
+   */
+  Object put(Object object);
 
-	/**
-	 * Update the given entity by it's ID or GUID
-	 * 
-	 * @param id
-	 *          the ID or GUID
-	 * @param entity
-	 *          the entity
-	 * @return the updated entity
-	 */
-	Object post(String id, Object entity);
+  /**
+   * Update the given entity by it's ID or GUID
+   * 
+   * @param id the ID or GUID
+   * @param entity the entity
+   * @return the updated entity
+   */
+  Object post(String id, Object entity);
 
-	/**
-	 * It removes the entity by it's ID or GUID
-	 * 
-	 * @param id
-	 *          the ID or GUID
-	 * @return the deleted entity
-	 */
-	Object delete(String id);
+  /**
+   * It removes the entity by it's ID or GUID
+   * 
+   * @param id the ID or GUID
+   * @return the deleted entity
+   */
+  Object delete(String id);
 }

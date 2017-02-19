@@ -10,21 +10,21 @@ import com.dbrage.lib.easyrs.processor.enums.ExecutionMode;
 import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 
 /**
- * The Endpoint Test 
+ * The Endpoint Test
  * 
  * @author Dorin Brage
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
 public @interface EndpointTest {
-	
-	Class<?> endpoint() default EndpointTest.class;
-	
-	Class<?> entity();
-	
-	ClientOperation[] operations() default {ClientOperation.ALL};
-	
-	ExecutionMode execution() default ExecutionMode.SINGLETON;
 
-	UUIDIdentifier identifier();
+  Class<?> endpoint() default EndpointTest.class;
+
+  Class<?> entity();
+
+  ClientOperation[] operations() default {ClientOperation.ALL};
+
+  ExecutionMode execution() default ExecutionMode.SINGLETON;
+
+  UUIDIdentifier identifier();
 }

@@ -18,66 +18,65 @@ import com.dbrage.lib.easyrs.client.provider.ClienResponseProvider;
  */
 public class Client {
 
-	private String endpoint = "";
-	
-	protected ResteasyClient client;
-	public ResteasyWebTarget target;
-	
-	protected Object entity;
+  private String endpoint = "";
 
-	public Client() {
-		super();
-		client = new ResteasyClientBuilder().build();
-		client.register(new ClienResponseProvider());
-	}
+  protected ResteasyClient client;
+  public ResteasyWebTarget target;
 
-	/**
-	 * Set the endpoint path
-	 * 
-	 * @param endpoint
-	 */
-	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
+  protected Object entity;
 
-		try {
-			target = client.target(new URI(endpoint));
-		} catch (NullPointerException | URISyntaxException e) {
-			e.printStackTrace();
-		}
-	}
+  public Client() {
+    super();
+    client = new ResteasyClientBuilder().build();
+    client.register(new ClienResponseProvider());
+  }
 
-	/**
-	 * Concatenates the ID/GUID for the given entity/entities on the url
-	 * 
-	 * @param id
-	 *          the ID for the persisted entity/entities
-	 */
-	public void setPathToPersistedEntity(String id) {
-		target = client.target(endpoint.concat("/").concat(id));
-	}
+  /**
+   * Set the endpoint path
+   * 
+   * @param endpoint
+   */
+  public void setEndpoint(String endpoint) {
+    this.endpoint = endpoint;
 
-	public void setBasicAuthentication(String user, String password) {
-		client.register(new BasicAuthenticationProvider(user, password));
-	}
+    try {
+      target = client.target(new URI(endpoint));
+    } catch (NullPointerException | URISyntaxException e) {
+      e.printStackTrace();
+    }
+  }
 
-	public ResteasyClient getClient() {
-		return client;
-	}
+  /**
+   * Concatenates the ID/GUID for the given entity/entities on the url
+   * 
+   * @param id the ID for the persisted entity/entities
+   */
+  public void setPathToPersistedEntity(String id) {
+    target = client.target(endpoint.concat("/").concat(id));
+  }
 
-	public void setClient(ResteasyClient client) {
-		this.client = client;
-	}
+  public void setBasicAuthentication(String user, String password) {
+    client.register(new BasicAuthenticationProvider(user, password));
+  }
 
-	public String getEndpoint() {
-		return endpoint;
-	}
+  public ResteasyClient getClient() {
+    return client;
+  }
 
-	public Object getEntity() {
-		return entity;
-	}
+  public void setClient(ResteasyClient client) {
+    this.client = client;
+  }
 
-	public void setEntity(Object entity) {
-		this.entity = entity;
-	}
+  public String getEndpoint() {
+    return endpoint;
+  }
+
+  public Object getEntity() {
+    return entity;
+  }
+
+  public void setEntity(Object entity) {
+    this.entity = entity;
+  }
 
 }

@@ -6,23 +6,23 @@ package com.dbrage.lib.easyrs.processor.enums;
  */
 public enum UUIDIdentifier {
 
-	ID("getId()"),
+  ID("getId()"),
 
-	GUID("getGuid()"),
+  GUID("getGuid()"),
 
-	UUID("getUuid()");
+  UUID("getUuid()");
 
-	private String value;
+  private String value;
 
-	private UUIDIdentifier(String value) {
-		this.value = value;
-	}
+  private UUIDIdentifier(String value) {
+    this.value = value;
+  }
 
-	public String getValue() {
-		return value;
-	}
+  public String getValue() {
+    return value;
+  }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

@@ -7,5 +7,5 @@ package com.dbrage.lib.easyrs.processor.enums;
  */
 public enum ExecutionMode {
 
-	ARQUILLIAN, SINGLETON;
+  ARQUILLIAN, SINGLETON;
 }

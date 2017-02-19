@@ -17,98 +17,98 @@ import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
  */
 public class AnnotatedClass {
 
-	private Name qualifiedName;
-	private String className;
+  private Name qualifiedName;
+  private String className;
 
-	private TypeMirror entity;
-	private TypeMirror endpoint;
-	private ClientOperation[] clientOperations;
-	private UUIDIdentifier identifier;
-	private ExecutionMode executionMode;
+  private TypeMirror entity;
+  private TypeMirror endpoint;
+  private ClientOperation[] clientOperations;
+  private UUIDIdentifier identifier;
+  private ExecutionMode executionMode;
 
-	public AnnotatedClass(TypeElement annotatedClazz, EndpointTest annotation) {
+  public AnnotatedClass(TypeElement annotatedClazz, EndpointTest annotation) {
 
-		this.qualifiedName = annotatedClazz.getQualifiedName();
-		this.className = annotatedClazz.getSimpleName().toString();
-		this.clientOperations = annotation.operations();
-		this.identifier = annotation.identifier();
-		this.executionMode = annotation.execution();
+    this.qualifiedName = annotatedClazz.getQualifiedName();
+    this.className = annotatedClazz.getSimpleName().toString();
+    this.clientOperations = annotation.operations();
+    this.identifier = annotation.identifier();
+    this.executionMode = annotation.execution();
 
-		getEntityFieldAnnotation(annotation);
-		getEndpointFieldAnnotation(annotation);
-		
-	}
+    getEntityFieldAnnotation(annotation);
+    getEndpointFieldAnnotation(annotation);
 
-	private void getEntityFieldAnnotation(EndpointTest annotation) {
-		try {
-			annotation.entity();
-		} catch (MirroredTypeException e) {
-			entity = e.getTypeMirror();
-		}
-	}
+  }
 
-	private void getEndpointFieldAnnotation(EndpointTest annotation) {
-		try {
-			annotation.endpoint();
-		} catch (MirroredTypeException e) {
-			endpoint = e.getTypeMirror();
-		}
-	}
+  private void getEntityFieldAnnotation(EndpointTest annotation) {
+    try {
+      annotation.entity();
+    } catch (MirroredTypeException e) {
+      entity = e.getTypeMirror();
+    }
+  }
 
-	public Name getQualifiedName() {
-		return qualifiedName;
-	}
+  private void getEndpointFieldAnnotation(EndpointTest annotation) {
+    try {
+      annotation.endpoint();
+    } catch (MirroredTypeException e) {
+      endpoint = e.getTypeMirror();
+    }
+  }
 
-	public void setQualifiedName(Name qualifiedName) {
-		this.qualifiedName = qualifiedName;
-	}
+  public Name getQualifiedName() {
+    return qualifiedName;
+  }
 
-	public TypeMirror getEntity() {
-		return entity;
-	}
+  public void setQualifiedName(Name qualifiedName) {
+    this.qualifiedName = qualifiedName;
+  }
 
-	public void setEntity(TypeMirror entity) {
-		this.entity = entity;
-	}
+  public TypeMirror getEntity() {
+    return entity;
+  }
 
-	public TypeMirror getEndpoint() {
-		return endpoint;
-	}
+  public void setEntity(TypeMirror entity) {
+    this.entity = entity;
+  }
 
-	public void setEndpoint(TypeMirror endpoint) {
-		this.endpoint = endpoint;
-	}
+  public TypeMirror getEndpoint() {
+    return endpoint;
+  }
 
-	public ClientOperation[] getClientOperations() {
-		return clientOperations;
-	}
+  public void setEndpoint(TypeMirror endpoint) {
+    this.endpoint = endpoint;
+  }
 
-	public void setClientOperations(ClientOperation[] testOperations) {
-		this.clientOperations = testOperations;
-	}
+  public ClientOperation[] getClientOperations() {
+    return clientOperations;
+  }
 
-	public String getClassName() {
-		return className;
-	}
+  public void setClientOperations(ClientOperation[] testOperations) {
+    this.clientOperations = testOperations;
+  }
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
+  public String getClassName() {
+    return className;
+  }
 
-	public UUIDIdentifier getIdentifier() {
-		return identifier;
-	}
+  public void setClassName(String className) {
+    this.className = className;
+  }
 
-	public void setIdentifier(UUIDIdentifier identifier) {
-		this.identifier = identifier;
-	}
+  public UUIDIdentifier getIdentifier() {
+    return identifier;
+  }
 
-	public ExecutionMode getExecutionMode() {
-		return executionMode;
-	}
+  public void setIdentifier(UUIDIdentifier identifier) {
+    this.identifier = identifier;
+  }
 
-	public void setExecutionMode(ExecutionMode executionMode) {
-		this.executionMode = executionMode;
-	}
+  public ExecutionMode getExecutionMode() {
+    return executionMode;
+  }
+
+  public void setExecutionMode(ExecutionMode executionMode) {
+    this.executionMode = executionMode;
+  }
 
 }
