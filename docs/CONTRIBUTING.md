@@ -29,7 +29,7 @@ File an issue if you think you've found a bug. Be sure to describe
 
 # Formating
 
-* `Java > Code Style > Formating` and import [**eclipse-java-google-style.xml**](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml)** . **It can be found also under `docs/`
+* `Java > Code Style > Formating` and import [**eclipse-java-google-style.xml**](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml). It can be found also under `docs/`
 
 # Contact
 
