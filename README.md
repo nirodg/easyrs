@@ -82,6 +82,10 @@ In order to make the request to the proper host some system properties should be
 * `client.host` By default the host will appoint to `http://localhost`
 * `client.user` and `client.pass` to authenticate against a [basic http authentication](https://tools.ietf.org/html/rfc2617#page-3) 
 
+# Versioning
+
+[SemVer](http://semver.org/) will be used for versioning because it provides a clear documentation. For the versions available, see the [tags on this repository](https://github.com/nirodg/easyrs/releases).
+
 # Contribute
 
 In case you would like to contribute updating the documentation, improving the functionalities, reporting issues or fixing them please, you\`re more than welcome 😄 . However, please have a look to the already defined [\#contribute](#contribute)'s guide
