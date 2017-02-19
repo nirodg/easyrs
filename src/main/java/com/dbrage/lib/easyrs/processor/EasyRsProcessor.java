@@ -18,8 +18,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
-import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
 import com.dbrage.lib.easyrs.processor.builder.ClassBuilder;
+import com.dbrage.lib.easyrs.processor.common.AnnotatedClass;
 import com.dbrage.lib.easyrs.processor.enums.ProcessingError;
 import com.dbrage.lib.easyrs.processor.exception.ProcessingException;
 import com.google.auto.service.AutoService;

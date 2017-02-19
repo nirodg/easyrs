@@ -18,7 +18,7 @@ import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 @Retention(RetentionPolicy.CLASS)
 public @interface EndpointTest {
 
-  Class<?> endpoint() default EndpointTest.class;
+  Class<?> endpoint();
 
   Class<?> entity();
 

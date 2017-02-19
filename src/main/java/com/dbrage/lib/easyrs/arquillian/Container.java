@@ -16,6 +16,7 @@ import org.junit.rules.TestWatcher;
 
 import com.dbrage.lib.easyrs.client.RestClient;
 import com.dbrage.lib.easyrs.data.DtoData;
+import com.dbrage.lib.easyrs.processor.common.Utils;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -27,7 +28,7 @@ import com.google.gson.internal.LinkedTreeMap;
  *
  * @param <T> the type of Dto
  */
-public abstract class Container<T> {
+public abstract class Container<T, E> {
 
   private final static String CLIENT_HOST = "http://localhost/";
   private final static String SYSPROP_CLIENT_HOST = "client.host";
@@ -37,6 +38,9 @@ public abstract class Container<T> {
   /** Used to access the resource folder for the given Class */
   public Class<T> dtoClass;
 
+  /** The endpoint class*/
+  public Class<T> endpointClass;
+  
   /** The JaxRs client */
   private RestClient client;
 
@@ -54,6 +58,10 @@ public abstract class Container<T> {
     this.dtoClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
         .getActualTypeArguments()[0];
 
+    this.endpointClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+        .getActualTypeArguments()[1];
+
+    
     initializeJaxRsClient();
 
     readJsonFile();
@@ -92,10 +100,12 @@ public abstract class Container<T> {
 
     // Set the host
     if (System.getProperty(SYSPROP_CLIENT_HOST) == null) {
-      this.client.setEndpoint(CLIENT_HOST);
+      this.client.setEndpoint(CLIENT_HOST.concat(Utils.getPathFromEndpoint(endpointClass)));
     } else {
-      this.client.setEndpoint(System.getProperty(SYSPROP_CLIENT_HOST));
+      this.client.setEndpoint(System.getProperty(SYSPROP_CLIENT_HOST).concat(Utils.getPathFromEndpoint(endpointClass)));
     }
+    
+    
 
     // Set authentication
     if (System.getProperty(SYSPROP_CLIENT_USER) != null

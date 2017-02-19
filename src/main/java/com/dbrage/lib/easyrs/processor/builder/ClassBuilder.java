@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dbrage.lib.easyrs.arquillian.Container;
-import com.dbrage.lib.easyrs.processor.annotation.common.AnnotatedClass;
+import com.dbrage.lib.easyrs.processor.common.AnnotatedClass;
 import com.dbrage.lib.easyrs.processor.enums.ClientOperation;
 import com.dbrage.lib.easyrs.processor.enums.ExecutionMode;
 import com.dbrage.lib.easyrs.processor.enums.ProcessingError;
@@ -118,8 +118,8 @@ public class ClassBuilder {
    * @throws ProcessingException if it was unsuccessful
    */
   private void setStartClass() throws ProcessingException {
-    String extendedContainer =
-        String.format("%s<%s>", Container.class.getName(), annotatedClass.getEntity());
+    String extendedContainer = String.format("%s<%s,%s>", Container.class.getName(),
+        annotatedClass.getEntity(), annotatedClass.getEndpoint());
 
     try {
 
@@ -130,7 +130,7 @@ public class ClassBuilder {
       jw.emitAnnotation(SuppressWarnings.class, "\"unchecked\"");
 
       jw.beginType(this.finalGeneratedClass, "class", getCustomModifier(Modifier.PUBLIC),
-          String.format("%s<%s>", Container.class.getSimpleName(), annotatedClass.getEntity()));
+          extendedContainer);
       jw.emitEmptyLine();
     } catch (IOException e) {
       throw new ProcessingException(typeAnnotatedClazz, ProcessingError.SET_INIT_CLASS,
