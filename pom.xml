@@ -3,7 +3,7 @@
 
 	<groupId>org.dbrage.lib</groupId>
 	<artifactId>easyrs</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
 		<easyrs.test.folder>easyrs-tests</easyrs.test.folder>
@@ -152,7 +152,7 @@
 		<url>https://github.com/nirodg/easyrs</url>
 		<connection>scm:git:git@github.com:nirodg/easyrs.git</connection>
 		<developerConnection>scm:git:git@github.com:nirodg/easyrs.git</developerConnection>
-	  	<tag>HEAD</tag>
+	  	<tag>easyrs-0.0.1</tag>
   </scm>
 	
 	<distributionManagement>
