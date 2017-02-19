@@ -59,6 +59,19 @@ In order to have it running you should have your POM file as followed
 
 5. _Optional_ - Right click on that folder and Use as Source Folder\`
 
+6. Under `src\test\resources`  create the same structure as the endpoint has and under this structure a json file must be defined with the same name as the interface. Example: `src\test\resources\com\example\easyrs\UserRest.json`
+
+```
+{ 	
+	// DO NOT CHANGE THE KEYS
+	
+	"getAll" : 0, // Total result
+	"create" : "", // Entity to be created
+	"update" : "", // Entity to be updated
+	
+}
+```
+
 At the end it should look like:
 
 ```java
@@ -70,6 +83,22 @@ import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 @EndpointTest(identifier=UUIDIdentifier.UUID, entity=UserDto.class)
 public interface UserRest {
 
+}
+```
+
+The JSON file should look like. **Important, do not use other keys**
+
+```
+{
+	"getAll" : 2, // Total result
+	"create" : {
+		"user" : "Admin",
+		"enabled" : true
+	},
+	"update" : {
+		"user" : "Moderator",
+		"enabled" : false
+	}
 }
 ```
 
