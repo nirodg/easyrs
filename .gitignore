@@ -75,3 +75,6 @@ buildNumber.properties
 
 # End of https://www.gitignore.io/api/maven
 /.apt_generated/
+
+# Deployment scripts
+maven-central-deploy*

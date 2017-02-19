@@ -34,7 +34,7 @@ public class Client {
   /**
    * Set the endpoint path
    * 
-   * @param endpoint
+   * @param endpoint the endpoint
    */
   public void setEndpoint(String endpoint) {
     this.endpoint = endpoint;

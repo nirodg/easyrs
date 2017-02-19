@@ -71,6 +71,7 @@ public class ClassBuilder {
    * @param typeAnnotatedClazz the annotated class
    * @param filer the {@link Filer}
    * @param elements a list of {@link Elements}
+   * @param annotatedClass the annotated class
    * @return {@link ClassBuilder}
    * @throws Exception if it was unsuccessful
    */
@@ -377,9 +378,9 @@ public class ClassBuilder {
   /**
    * Generates the class
    * 
-   * @return this
+   * @return this the class
    * @throws ProcessingException if it was unsuccessful
-   * @throws IOException
+   * @throws IOException it something goes wrong
    */
   public ClassBuilder build() throws ProcessingException, IOException {
 

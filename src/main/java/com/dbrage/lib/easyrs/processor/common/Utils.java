@@ -1,8 +1,6 @@
 package com.dbrage.lib.easyrs.processor.common;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import javax.ws.rs.Path;
 
@@ -16,12 +14,10 @@ public class Utils {
   /**
    * Get the specified root path for a given endpoint
    * 
+   * @param clazz the Class
    * @return The root path, if not {@code NULL}
    */
   public static String getPathFromEndpoint(Class<?> clazz) {
-    // Get the interface
-    // Type endpoint = ((ParameterizedType)
-    // clazz.getGenericSuperclass()).getActualTypeArguments()[0];
     try {
       Class<?> loadedClazz = Class.forName(clazz.getTypeName());
       // Get all the annotations from the interface

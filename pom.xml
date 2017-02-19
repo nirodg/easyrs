@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.dbrage.lib</groupId>
 	<artifactId>easyrs</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.3-SNAPSHOT</version>
 
 	<properties>
 		<easyrs.test.folder>easyrs-tests</easyrs.test.folder>
@@ -134,15 +133,27 @@
 				<version>1.8.1</version>
 				<configuration>
 					<tag>${project.artifactId}-${project.version}</tag>
+			        <providerImplementations>
+            	  		<git>jgit</git>
+        			</providerImplementations>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-jgit</artifactId>
+			        	<version>1.9.5</version>
+					</dependency>
+				</dependencies>				
 			</plugin>
 		</plugins>
 	</build>
 
 	<scm>
-		<developerConnection>Dorin Gheorghe Brage</developerConnection>
-		<connection>scm:git:https://github.com/nirodg/easyrs</connection>
-	</scm>
+		<url>https://github.com/nirodg/easyrs</url>
+		<connection>scm:git:git@github.com:nirodg/easyrs.git</connection>
+		<developerConnection>scm:git:git@github.com:nirodg/easyrs.git</developerConnection>
+	  	<tag>HEAD</tag>
+  </scm>
 	
 	<distributionManagement>
 		<repository>

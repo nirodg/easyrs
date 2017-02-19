@@ -3,7 +3,6 @@ package com.dbrage.lib.easyrs.processor.enums;
 /**
  * The requests available for testing the end points
  * 
- * @see FactoryGenerator
  * @author Dorin Brage
  */
 public enum ClientOperation {

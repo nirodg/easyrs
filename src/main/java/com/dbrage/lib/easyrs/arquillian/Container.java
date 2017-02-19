@@ -120,6 +120,7 @@ public abstract class Container<T, E> {
    * The deployment including all Maven dependencies
    * 
    * @return the WAR file
+   * @param clazz the Class
    */
   public static WebArchive getDeployment(Class<?> clazz) {
     File[] mavenDependencies = Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")

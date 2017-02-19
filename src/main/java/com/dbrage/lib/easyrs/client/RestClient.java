@@ -13,8 +13,6 @@ import com.dbrage.lib.easyrs.client.common.ClientOperations;
  * The Rest Client
  * 
  * @author Dorin Brage
- * 
- * @param <T> the type of entity which must be tested
  */
 public class RestClient extends Client implements ClientOperations {
 
