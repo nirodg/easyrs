@@ -189,32 +189,33 @@ public class ClassBuilder {
     byte sequence = 0;
 
     TypeMirror entity = annotatedClass.getEntity();
+    String simpleEntityName = entity.toString().substring(entity.toString().lastIndexOf(".") + 1);
 
     methods = new TreeMap<>();
 
     // Get All's method
     methods.put(ClientOperation.GET_ALL, new MethodBuilder(ClientOperation.GET_ALL.getNameMethod())
         // Local Entities
-        .addStatements(StatementType.defineEntities.getValue(), entity,
-            StatementType.nameEntities.getValue(), entity, ClientOperation.GET_ALL.name())
+        .addStatements(StatementType.defineEntities.getValue(), simpleEntityName,
+            StatementType.nameEntities.getValue(), simpleEntityName, ClientOperation.GET_ALL.name())
         // Fetched Entities
-        .addStatements(StatementType.defineFetchEntities.getValue(), entity,
-            StatementType.nameFetchedEntities.getValue(), entity)
+        .addStatements(StatementType.defineFetchEntities.getValue(), simpleEntityName,
+            StatementType.nameFetchedEntities.getValue(), simpleEntityName)
         // Define Assert
         .addStatements(StatementType.defineAssertEqualsSize.getValue(),
             StatementType.nameEntities.getValue(), StatementType.nameFetchedEntities.getValue()));
 
     // Create's method
     methods.put(ClientOperation.PUT, new MethodBuilder(ClientOperation.PUT.getNameMethod())
-        // Local entity
-        .addStatements(StatementType.defineEntity.getValue(), entity,
-            StatementType.nameEntity.getValue(), entity, ClientOperation.PUT.name())
+        // Local simpleEntityName
+        .addStatements(StatementType.defineEntity.getValue(), simpleEntityName,
+            StatementType.nameEntity.getValue(), simpleEntityName, ClientOperation.PUT.name())
         // Assert Not Null
         .addStatements(StatementType.defineAssertNotNull.getValue(),
             StatementType.nameEntity.getValue())
-        // Persist entity
-        .addStatements(StatementType.defineCreateEntity.getValue(), entity,
-            StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue())
+        // Persist simpleEntityName
+        .addStatements(StatementType.defineCreateEntity.getValue(), simpleEntityName,
+            StatementType.nameFetchedEntity.getValue(), simpleEntityName, StatementType.nameEntity.getValue())
         // Assert Not Null
         .addStatements(StatementType.defineAssertNotNull.getValue(),
             StatementType.nameFetchedEntity.getValue())
@@ -224,21 +225,21 @@ public class ClassBuilder {
 
     // Update's method
     methods.put(ClientOperation.POST, new MethodBuilder(ClientOperation.POST.getNameMethod())
-        // Local entity
-        .addStatements(StatementType.defineEntity.getValue(), entity,
-            StatementType.nameEntity.getValue(), entity, ClientOperation.POST.name())
+        // Local simpleEntityName
+        .addStatements(StatementType.defineEntity.getValue(), simpleEntityName,
+            StatementType.nameEntity.getValue(), simpleEntityName, ClientOperation.POST.name())
         // Assert Not Null
         .addStatements(StatementType.defineAssertNotNull.getValue(),
             StatementType.nameEntity.getValue())
-        // Persist entity
+        // Persist simpleEntityName
         .addStatements(StatementType.definePersistEntity.getValue(),
-            StatementType.nameEntity.getValue(), entity, StatementType.nameEntity.getValue())
+            StatementType.nameEntity.getValue(), simpleEntityName, StatementType.nameEntity.getValue())
         // Assert Not Null
         .addStatements(StatementType.defineAssertNotNull.getValue(),
             StatementType.nameEntity.getValue())
         // Fetched Entity
-        .addStatements(StatementType.defineUpdateEntity.getValue(), entity,
-            StatementType.nameFetchedEntity.getValue(), entity, StatementType.nameEntity.getValue(),
+        .addStatements(StatementType.defineUpdateEntity.getValue(), simpleEntityName,
+            StatementType.nameFetchedEntity.getValue(), simpleEntityName, StatementType.nameEntity.getValue(),
             annotatedClass.getIdentifier().getValue(), StatementType.nameEntity.getValue())
         // Assert Not Null
         .addStatements(StatementType.defineAssertNotNull.getValue(),
@@ -250,21 +251,21 @@ public class ClassBuilder {
     // Delete's method
     methods.put(ClientOperation.DELETE,
         new MethodBuilder(ClientOperation.DELETE.getNameMethod())
-            // Local entity
-            .addStatements(StatementType.defineEntity.getValue(), entity,
-                StatementType.nameEntity.getValue(), entity, ClientOperation.DELETE.name())
+            // Local simpleEntityName
+            .addStatements(StatementType.defineEntity.getValue(), simpleEntityName,
+                StatementType.nameEntity.getValue(), simpleEntityName, ClientOperation.DELETE.name())
             // Assert Not Null
             .addStatements(StatementType.defineAssertNotNull.getValue(),
                 StatementType.nameEntity.getValue())
-            // Persist entity
+            // Persist simpleEntityName
             .addStatements(StatementType.definePersistEntity.getValue(),
-                StatementType.nameEntity.getValue(), entity, StatementType.nameEntity.getValue())
+                StatementType.nameEntity.getValue(), simpleEntityName, StatementType.nameEntity.getValue())
             // Assert Not Null
             .addStatements(StatementType.defineAssertNotNull.getValue(),
                 StatementType.nameEntity.getValue())
-            // Delete entity
-            .addStatements(StatementType.defineDeleteEntity.getValue(), entity,
-                StatementType.nameFetchedEntity.getValue(), entity,
+            // Delete simpleEntityName
+            .addStatements(StatementType.defineDeleteEntity.getValue(), simpleEntityName,
+                StatementType.nameFetchedEntity.getValue(), simpleEntityName,
                 StatementType.nameEntity.getValue(), annotatedClass.getIdentifier().getValue())
             // Assert Null
             .addStatements(StatementType.defineAssertNull.getValue(),
@@ -427,6 +428,7 @@ public class ClassBuilder {
     imports.add(Assert.class.getCanonicalName());
     imports.add(List.class.getCanonicalName());
     imports.add(ArrayList.class.getCanonicalName());
+    imports.add(annotatedClass.getEntity().toString());
 
     if (annotatedClass.getExecutionMode().equals(ExecutionMode.ARQUILLIAN)) {
       imports.add(Deployment.class.getCanonicalName());
