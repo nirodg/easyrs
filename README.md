@@ -10,16 +10,16 @@ In order to have it running you should have your POM file as followed
 
 ```xml
 <properties>
-    <version.org.dbrage.easyrs>0.0.1-SNAPSHOT</version.org.dbrage.easyrs>
+    <version.easyrs>0.0.2-SNAPSHOT</version.easyrs>
 </properties>
 
 <dependencies>
 
     <!-- -->
     <dependency>
-        <groupId>org.dbrage.lib</groupId>
-        <artifactId>easyrs-test</artifactId>
-        <version>${version.org.dbrage.easyrs}</version>
+        <groupId>com.dorinbrage</groupId>
+        <artifactId>easyrs</artifactId>
+        <version>${version.easyrs}</version>
     </dependency>
     <!-- -->
 
@@ -36,9 +36,9 @@ In order to have it running you should have your POM file as followed
                 <target>1.8</target>
                 <annotationProcessorPaths>
                     <path>
-                        <groupId>org.dbrage.lib</groupId>
-                        <artifactId>easyrs-test</artifactId>
-                        <version>${version.org.dbrage.easyrs}</version>
+                        <groupId>com.dorinbrage</groupId>
+                        <artifactId>easyrs</artifactId>
+                        <version>${version.easyrs}</version>
                     </path>
                 </annotationProcessorPaths>
             </configuration>
@@ -80,7 +80,7 @@ package com.example.easyrs;
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
 import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 
-@EndpointTest(identifier=UUIDIdentifier.UUID, entity=UserDto.class)
+@EndpointTest(identifier=UUIDIdentifier.UUID, entity=UserDto.class, endpoint=UserEndpoint.class)
 public interface UserRest {
 
 }

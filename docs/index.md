@@ -10,16 +10,16 @@ In order to have it running you should have your POM file as followed
 
 ```xml
 <properties>
-    <version.org.dbrage.easyrs>0.0.1-SNAPSHOT</version.org.dbrage.easyrs>
+    <version.easyrs>0.0.2-SNAPSHOT</version.easyrs>
 </properties>
 
 <dependencies>
 
     <!-- -->
     <dependency>
-        <groupId>org.dbrage.lib</groupId>
-        <artifactId>easyrs-test</artifactId>
-        <version>${version.org.dbrage.easyrs}</version>
+        <groupId>com.dorinbrage</groupId>
+        <artifactId>easyrs</artifactId>
+        <version>${version.easyrs}</version>
     </dependency>
     <!-- -->
 
@@ -36,9 +36,9 @@ In order to have it running you should have your POM file as followed
                 <target>1.8</target>
                 <annotationProcessorPaths>
                     <path>
-                        <groupId>org.dbrage.lib</groupId>
-                        <artifactId>easyrs-test</artifactId>
-                        <version>${version.org.dbrage.easyrs}</version>
+                        <groupId>com.dorinbrage</groupId>
+                        <artifactId>easyrs</artifactId>
+                        <version>${version.easyrs}</version>
                     </path>
                 </annotationProcessorPaths>
             </configuration>
@@ -59,6 +59,19 @@ In order to have it running you should have your POM file as followed
 
 5. _Optional_ - Right click on that folder and Use as Source Folder\`
 
+6. Under `src\test\resources`  create the same structure as the endpoint has and under this structure a json file must be defined with the same name as the interface. Example: `src\test\resources\com\example\easyrs\UserRest.json`
+
+```
+{   
+    // DO NOT CHANGE THE KEYS
+    
+    "getAll" : 0, // Total result
+    "create" : "", // Entity to be created
+    "update" : "", // Entity to be updated
+    
+}
+```
+
 At the end it should look like:
 
 ```java
@@ -67,9 +80,25 @@ package com.example.easyrs;
 import com.dbrage.lib.easyrs.processor.annotation.EndpointTest;
 import com.dbrage.lib.easyrs.processor.enums.UUIDIdentifier;
 
-@EndpointTest(identifier=UUIDIdentifier.UUID, entity=UserDto.class)
+@EndpointTest(identifier=UUIDIdentifier.UUID, entity=UserDto.class, endpoint=UserEndpoint.class)
 public interface UserRest {
 
+}
+```
+
+The JSON file should look like. **Important, do not use other keys**
+
+```
+{
+    "getAll" : 2, // Total result
+    "create" : {
+        "user" : "Admin",
+        "enabled" : true
+    },
+    "update" : {
+        "user" : "Moderator",
+        "enabled" : false
+    }
 }
 ```
 
@@ -88,7 +117,7 @@ In order to make the request to the proper host some system properties should be
 
 # Contribute
 
-In case you would like to contribute updating the documentation, improving the functionalities, reporting issues or fixing them please, you\`re more than welcome 😄 . However, please have a look to the already defined [\#contribute](#contribute)'s guide
+In case you would like to contribute updating the documentation, improving the functionalities, reporting issues or fixing them please, you\`re more than welcome 😄 . However, please have a look to the already defined [contribute](/docs/CONTRIBUTING.md)'s guide
 
 # License
 
