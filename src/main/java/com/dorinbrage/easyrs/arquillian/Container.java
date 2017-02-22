@@ -39,7 +39,7 @@ public abstract class Container<T, E> {
   public Class<T> dtoClass;
 
   /** The endpoint class*/
-  public Class<T> endpointClass;
+  public Class<E> endpointClass;
   
   /** The JaxRs client */
   private RestClient client;
@@ -58,7 +58,7 @@ public abstract class Container<T, E> {
     this.dtoClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
         .getActualTypeArguments()[0];
 
-    this.endpointClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+    this.endpointClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
         .getActualTypeArguments()[1];
 
     
