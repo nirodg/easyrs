@@ -306,7 +306,7 @@ public class ClassBuilder {
       jw.beginMethod(method.getTypeMethod(), method.getName(), method.getModifiers(), null, null);
 
       for (String statement : method.getStatements()) {
-        jw.emitStatement(statement, null);
+        jw.emitStatement(statement, (Object[]) null);
       }
 
       jw.endMethod();
@@ -321,7 +321,7 @@ public class ClassBuilder {
   private void setVariables() {
     try {
       /** The JaxRS Client */
-      jw.emitSingleLineComment("Here you can define your global variables", null);
+      jw.emitSingleLineComment("Here you can define your global variables", (Object[]) null);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -364,7 +364,7 @@ public class ClassBuilder {
 
       jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
 
-      jw.emitSingleLineComment("Here you can initialize your variables", null);
+      jw.emitSingleLineComment("Here you can initialize your variables", (Object[]) null);
 
       jw.endMethod();
       jw.emitEmptyLine();

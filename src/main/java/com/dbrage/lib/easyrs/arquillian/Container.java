@@ -159,6 +159,7 @@ public abstract class Container<T, E> {
    * @param map the Map
    * @return the {@code Object}
    */
+  @SuppressWarnings("unchecked")
   private Object createDtoData(Object map) {
 
     Object instance = null;
@@ -171,7 +172,7 @@ public abstract class Container<T, E> {
     }
 
     fields = dtoClass.getDeclaredFields();
-
+    
     if (map instanceof LinkedTreeMap) {
       for (Entry<String, Object> key : ((LinkedTreeMap<String, Object>) map).entrySet()) {
         setValueForField(instance, fields, key);

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -13,7 +14,7 @@
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>This library provides an easy way to test the basic CRUD operation for your endpoints. The tests can be executed within Arquillian or as a Singleton application</description>
-	<url>https://github.com/nirodg/easyrs</url>
+	<url>http://github.com/nirodg/easyrs</url>
 
 	<properties>
 		<easyrs.test.folder>easyrs-tests</easyrs.test.folder>
@@ -153,17 +154,23 @@
 						<artifactId>maven-scm-provider-jgit</artifactId>
 						<version>1.9.5</version>
 					</dependency>
-				</dependencies>				
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
 
 	<scm>
+		<tag>HEAD</tag>
 		<url>https://github.com/nirodg/easyrs</url>
-		<connection>scm:git:git@github.com:nirodg/easyrs.git</connection>
-		<developerConnection>scm:git:ssh@github.com:nirodg/easyrs.git</developerConnection>
+		<connection>scm:git:https://github.com/nirodg/easyrs.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/nirodg/easyrs.git</developerConnection>
 	</scm>
-	
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/nirodg/easyrs/issues</url>
+	</issueManagement>
+
 	<distributionManagement>
 		<repository>
 			<id>github</id>
@@ -177,7 +184,7 @@
 			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
-	
+
 	<developers>
 		<developer>
 			<name>Dorin Brage</name>
