@@ -15,6 +15,7 @@ import javax.lang.model.element.Modifier;
 public class MethodBuilder {
 
   private final static String DEFAULT_TYPE = "void";
+  static final String EMPTY_LINE = System.getProperty("line.separator");
 
   private String typeMethod;
 
@@ -80,6 +81,11 @@ public class MethodBuilder {
     statements.add(String.format(format, args).toString());
     return this;
   }
+  
+  public MethodBuilder addEmptyLine(){
+    statements.add(EMPTY_LINE);
+    return this;
+  }
 
   private Set<Modifier> getCustomModifier(Object... objects) {
     Set<Modifier> type = new HashSet<>();
@@ -88,6 +94,10 @@ public class MethodBuilder {
       type.add((Modifier) modifier);
     }
     return type;
+  }
+
+  public static final String getEmptyLine() {
+    return EMPTY_LINE;
   }
 
 }
