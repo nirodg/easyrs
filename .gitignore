@@ -78,3 +78,6 @@ buildNumber.properties
 
 # Deployment scripts
 maven-central-deploy*
+
+# Rultor files
+.rultor.yml
