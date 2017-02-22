@@ -1,8 +1,10 @@
 package com.dorinbrage.easyrs.processor.builder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.annotation.Generated;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
@@ -22,18 +25,22 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
+import org.jboss.shrinkwrap.resolver.api.maven.MavenStrategyStage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dorinbrage.easyrs.arquillian.Container;
+import com.dorinbrage.easyrs.processor.EasyRsProcessor;
 import com.dorinbrage.easyrs.processor.common.AnnotatedClass;
 import com.dorinbrage.easyrs.processor.enums.ClientOperation;
 import com.dorinbrage.easyrs.processor.enums.ExecutionMode;
 import com.dorinbrage.easyrs.processor.enums.ProcessingError;
 import com.dorinbrage.easyrs.processor.enums.StatementType;
 import com.dorinbrage.easyrs.processor.exception.ProcessingException;
+import com.google.common.reflect.ClassPath;
 import com.squareup.javawriter.JavaWriter;
 
 /**
@@ -344,12 +351,13 @@ public class ClassBuilder {
   /**
    * Define the global variables
    */
-  private void setVariables() {
+  private void setVariables() throws ProcessingException{
     try {
-      /** The JaxRS Client */
       jw.emitSingleLineComment("Here you can define your global variables", (Object[]) null);
+      jw.emitEmptyLine();
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new ProcessingException(typeAnnotatedClazz, ProcessingError.GENERIC_ERROR,
+          e.getMessage());
     }
   }
 
@@ -389,8 +397,9 @@ public class ClassBuilder {
       jw.emitAnnotation(Before.class);
 
       jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
-
+      
       jw.emitSingleLineComment("Here you can initialize your variables", (Object[]) null);
+      jw.emitEmptyLine();      
 
       jw.endMethod();
       jw.emitEmptyLine();
@@ -419,6 +428,8 @@ public class ClassBuilder {
     initPackage();
 
     setImports();
+
+    setGenerateAnnotation();
 
     setStartClass();
 
@@ -454,6 +465,7 @@ public class ClassBuilder {
     imports.add(List.class.getCanonicalName());
     imports.add(ArrayList.class.getCanonicalName());
     imports.add(annotatedClass.getEntity().toString());
+    imports.add(Generated.class.getCanonicalName());
 
     if (annotatedClass.getExecutionMode().equals(ExecutionMode.ARQUILLIAN)) {
       imports.add(Deployment.class.getCanonicalName());
@@ -480,6 +492,30 @@ public class ClassBuilder {
       throw new ProcessingException(typeAnnotatedClazz, ProcessingError.INIT_IMPORTS,
           e.getMessage());
     }
+  }
+
+  /**
+   * Sets the Generate's annotation with some additional information regarding the generated class
+   * 
+   * @throws ProcessingException if it was unsuccessful
+   */
+  private void setGenerateAnnotation() throws ProcessingException {
+
+    String comments = "\"vendor: %s %s\"";
+    String vendorName = System.getProperty("java.vendor");
+    String vendorVersion = System.getProperty("java.version");
+
+    Map<String, Object> attributes = new TreeMap<>();
+    attributes.put("value", String.format("\"%s\"", EasyRsProcessor.class.getCanonicalName()));
+    attributes.put("date", String.format("\"%s\"", new Date().toString()));
+    attributes.put("comments", String.format(comments, vendorName, vendorVersion));
+
+    try {
+      jw.emitAnnotation(Generated.class, attributes);
+    } catch (IOException e) {
+      throw new ProcessingException(typeAnnotatedClazz, ProcessingError.SET_GENERATE_ANNOTATION);
+    }
+
   }
 
   /**
