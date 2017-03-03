@@ -31,7 +31,7 @@ import com.google.auto.service.AutoService;
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class EasyRsProcessor extends AbstractProcessor {
+public class EndpointProcessor extends AbstractProcessor {
 
   private Elements elements;
   private Filer filer;

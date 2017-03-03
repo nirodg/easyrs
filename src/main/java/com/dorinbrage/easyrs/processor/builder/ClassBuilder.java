@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.dorinbrage.easyrs.arquillian.Container;
-import com.dorinbrage.easyrs.processor.EasyRsProcessor;
+import com.dorinbrage.easyrs.processor.EndpointProcessor;
 import com.dorinbrage.easyrs.processor.common.AnnotatedClass;
 import com.dorinbrage.easyrs.processor.enums.ClientOperation;
 import com.dorinbrage.easyrs.processor.enums.ExecutionMode;
@@ -506,7 +506,7 @@ public class ClassBuilder {
     String vendorVersion = System.getProperty("java.version");
 
     Map<String, Object> attributes = new TreeMap<>();
-    attributes.put("value", String.format("\"%s\"", EasyRsProcessor.class.getCanonicalName()));
+    attributes.put("value", String.format("\"%s\"", EndpointProcessor.class.getCanonicalName()));
     attributes.put("date", String.format("\"%s\"", new Date().toString()));
     attributes.put("comments", String.format(comments, vendorName, vendorVersion));
 
