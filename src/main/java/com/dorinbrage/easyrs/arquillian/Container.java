@@ -201,7 +201,6 @@ public abstract class Container<T, E> {
             field.setAccessible(true);
           }
           field.set(instance, value.getValue());
-          System.out.println(String.format("Field %s = %s", field.getName(), value.getValue()));
         }
       }
     } catch (IllegalArgumentException | IllegalAccessException e) {

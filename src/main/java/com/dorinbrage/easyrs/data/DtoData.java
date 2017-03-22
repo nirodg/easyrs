@@ -1,7 +1,5 @@
 package com.dorinbrage.easyrs.data;
 
-import com.google.gson.internal.LinkedTreeMap;
-
 /**
  * The Dto Data, reflects the JSON file
  * 
@@ -9,37 +7,37 @@ import com.google.gson.internal.LinkedTreeMap;
  */
 public class DtoData {
 
-  private LinkedTreeMap<String, Object> create;
+  private Object create;
 
-  private LinkedTreeMap<String, Object> update;
+  private Object update;
 
   private int getAll;
 
   /**
    * @return the create
    */
-  public LinkedTreeMap<String, Object> getCreate() {
+  public Object getCreate() {
     return create;
   }
 
   /**
    * @return the update
    */
-  public LinkedTreeMap<String, Object> getUpdate() {
+  public Object getUpdate() {
     return update;
   }
 
   /**
    * @param create the create to set
    */
-  public void setCreate(LinkedTreeMap<String, Object> create) {
+  public void setCreate(Object create) {
     this.create = create;
   }
 
   /**
    * @param update the update to set
    */
-  public void setUpdate(LinkedTreeMap<String, Object> update) {
+  public void setUpdate(Object update) {
     this.update = update;
   }
 
