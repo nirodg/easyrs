@@ -65,7 +65,7 @@ In order to have it running you should have your POM file as followed
 |execution| Either generated the class for being deployable within`ARQUILLIAN` or as a `SINGLETON`. By default is `ExecutionMode.SINGLETON` *Optional*|
 |identifier| Reference to the ID's field. The options are `ID`, `GUID` and `UUID`. By default is `UUIDIdentifier.GUID` *Optional* |
 
-3. Execute `mvn install`
+3. Execute `mvn install -Peasyrs-generate-tests`
 
 4. The generated classes will be under `/target/generated-test-sources/test-annotations` or 
 
