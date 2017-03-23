@@ -173,20 +173,17 @@ The arguments are the followed:
 Note: If your DTO is under `/src/main/resources` then you should use `${arg.resource.folder}` due the JSON will be fetched based on where the DTO is created, either `/src/main/java` or `/src/test/java`
 
 
-# RestClient
+# Rest Client - Authentication
 
-This library provides a way how to authenticate against realm's mechanism. By default the host will appoint to `http://localhost`unless you define the system property
-
-In order to make the request to the proper host some system properties should be specified
+Authentication mecanisms which are supported:
+1. [Basic HTTP Authentication](https://tools.ietf.org/html/rfc2617#page-3)
 
 | Property        | Description   |
 | ------------- |-------------|
-|client.host| By default the host will appoint to `http://localhost`|
-|client.user| It can be either the username or email's account. Depends of how you authenticate against the REST Endpoint |
-|client.pass| The password |
+|client.host| By default the host will appoint to `http://localhost` *Optional*|
+|client.user| It can be either the username or email's account. Depends of how you authenticate against the REST Endpoint *Optional*|
+|client.pass| The password *Optional*|
 
-Authentication mecanism which are supported:
-1. [Basic HTTP Authentication](https://tools.ietf.org/html/rfc2617#page-3) 
 
 # Versioning
 
@@ -199,4 +196,3 @@ In case you would like to contribute updating the documentation, improving the f
 # License
 
 [MIT](http://showalicense.com/?year=2017&fullname=Dorin%20Gheorghe%20Brage#license-mit) © [Dorin Brage](https://github.com/nirodg/)
-
