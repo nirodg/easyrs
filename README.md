@@ -59,11 +59,11 @@ In order to have it running you should have your POM file as followed
 
 |Attribute| Description|
 | ------------- |-------------|
-|endpoint| Reference to your endpoint class.  **Required** |
-|entity| Reference to your entity class. It can be a simple POJO class or DAO. **Required**|
-|operations| The options are `GET_ALL`, `PUT`, `POST` and `DELETE`. By default will generate all the methods. Example: `operations = {ClientOperation.GET, ClientOperation.DELETE}` **Optional** |
-|execution| Either generated the class for being deployable within`ARQUILLIAN` or as a `SINGLETON`. By default is `ExecutionMode.SINGLETON` **Optional**|
-|identifier| Reference to the ID's field. The options are `ID`, `GUID` and `UUID`. By default is `UUIDIdentifier.GUID` **Optional** |
+|endpoint| Reference to your endpoint class.  *Required* |
+|entity| Reference to your entity class. It can be a simple POJO class or DAO. *Required*|
+|operations| The options are `GET_ALL`, `PUT`, `POST` and `DELETE`. By default will generate all the methods. Example: `operations = {ClientOperation.GET, ClientOperation.DELETE}` *Optional* |
+|execution| Either generated the class for being deployable within`ARQUILLIAN` or as a `SINGLETON`. By default is `ExecutionMode.SINGLETON` *Optional*|
+|identifier| Reference to the ID's field. The options are `ID`, `GUID` and `UUID`. By default is `UUIDIdentifier.GUID` *Optional* |
 
 3. Execute `mvn install`
 
