@@ -58,6 +58,7 @@ In order to have it running you should have your POM file as followed
 2. Add the annotation `@EndpointTest`. The options are the followed:
 
 |Attribute| Description|
+| ------------- |-------------|
 |endpoint| Reference to your endpoint class.  **Required** |
 |entity| Reference to your entity class. It can be a simple POJO class or DAO. **Required**|
 |operations| The options are `GET_ALL`, `PUT`, `POST` and `DELETE`. By default will generate all the methods. Example: `operations = {ClientOperation.GET, ClientOperation.DELETE}` **Optional** |
