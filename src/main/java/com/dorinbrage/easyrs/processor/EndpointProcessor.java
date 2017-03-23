@@ -1,27 +1,19 @@
 package com.dorinbrage.easyrs.processor;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
+
+import org.apache.commons.lang.ClassUtils;
 
 import com.dorinbrage.easyrs.processor.annotation.EndpointTest;
 import com.dorinbrage.easyrs.processor.builder.ClassBuilder;
 import com.dorinbrage.easyrs.processor.common.AnnotatedClass;
-import com.dorinbrage.easyrs.processor.enums.ProcessingError;
-import com.dorinbrage.easyrs.processor.exception.ProcessingException;
+import com.dorinbrage.easyrs.processor.common.CommonProcessor;
 import com.google.auto.service.AutoService;
 
 /**
@@ -30,81 +22,40 @@ import com.google.auto.service.AutoService;
  * @author Dorin Brage
  */
 @AutoService(Processor.class)
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class EndpointProcessor extends AbstractProcessor {
-
-  private Elements elements;
-  private Filer filer;
-
-  /** Will contain all the classes annotated with EndpointTest */
-  private Map<String, AnnotatedClass> container;
+public class EndpointProcessor extends CommonProcessor {
 
   /** The Generator factory */
   private ClassBuilder generator;
 
   @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    this.roundEnv = roundEnv;
+    this.generator = new ClassBuilder();
+    getAnnotatedInterfaces();
 
-    try {
-      // Iterate over each class
-      for (Element element : roundEnv.getElementsAnnotatedWith(EndpointTest.class)) {
 
-        // Looks for interfaces with IndependentTest.class
-        isOnlyInterfaceAnnotated(element);
+    for (Entry<String, AnnotatedClass> item : container.entrySet()) {
+      if (!processedInterfaces.contains(item.getValue())) {
 
-        // The class with the annotation to be tested
-        TypeElement annotatedClazz = (TypeElement) element;
-
-        // It checks to do not generate the class twice
-        if (!container.containsKey(annotatedClazz.getSimpleName().toString())) {
-          container.put(annotatedClazz.getSimpleName().toString(),
-              new AnnotatedClass(annotatedClazz, element.getAnnotation(EndpointTest.class)));
-        } else {
-          throw new ProcessingException(element, ProcessingError.CLASS_CANT_BE_DUPLICATED,
-              annotatedClazz.getSimpleName().toString());
-        }
-
+        TypeElement annotatedClazz = null;
         try {
-          generator.init(annotatedClazz, container.get(annotatedClazz.getSimpleName().toString()),
+
+          for (Element element : roundEnv.getElementsAnnotatedWith(EndpointTest.class)) {
+            if (element.getSimpleName().toString().equals(item.getKey())) {
+              annotatedClazz = (TypeElement) element;
+            }
+          }
+
+          generator.init(annotatedClazz,
+              container.get(ClassUtils.getShortClassName(item.getValue().getEndpoint().toString())),
               filer, elements).build();
         } catch (Exception e) {
-          throw new ProcessingException(element, ProcessingError.PROCESSOR_ERROR_GENERATING);
+          e.printStackTrace();
         }
 
+        // add processed interface to the list
+        processedInterfaces.add(item.getValue());
       }
-    } catch (ProcessingException e) {
-      e.printStackTrace();
-    }
-    return true;
-  }
-
-  @Override
-  public synchronized void init(ProcessingEnvironment processingEnv) {
-    super.init(processingEnv);
-    elements = processingEnv.getElementUtils();
-    filer = processingEnv.getFiler();
-    container = new HashMap<String, AnnotatedClass>();
-    generator = new ClassBuilder();
-  }
-
-  @Override
-  public Set<String> getSupportedAnnotationTypes() {
-    Set<String> annotations = new LinkedHashSet<String>();
-    annotations.add(EndpointTest.class.getCanonicalName());
-    return annotations;
-  }
-
-  /**
-   * Checks if the annotation was used only by interfaces
-   * 
-   * @param element Represents a program element such as a package, class, or method
-   * @return {@code true} if the element is an {@code Interface}, {@code false} is it's not
-   * @throws ProcessingException
-   */
-  private boolean isOnlyInterfaceAnnotated(Element element) throws ProcessingException {
-    if (!element.getKind().equals(ElementKind.INTERFACE)) {
-      throw new ProcessingException(element, ProcessingError.PROCESSOR_ONLY_INTERFACES,
-          EndpointTest.class.getName());
     }
     return true;
   }

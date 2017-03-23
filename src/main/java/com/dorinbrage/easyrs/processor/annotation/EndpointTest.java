@@ -26,5 +26,5 @@ public @interface EndpointTest {
 
   ExecutionMode execution() default ExecutionMode.SINGLETON;
 
-  UUIDIdentifier identifier();
+  UUIDIdentifier identifier() default UUIDIdentifier.GUID;
 }

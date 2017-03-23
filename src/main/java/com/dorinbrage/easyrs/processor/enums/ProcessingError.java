@@ -20,7 +20,10 @@ public enum ProcessingError {
                                           "Only interfaces can be annotated with @%s"), PROCESSOR_ERROR_GENERATING(
                                               "Error generating the class"), CLASS_CANT_BE_DUPLICATED(
                                                   "%s it can't be generated twice"), GENERIC_ERROR(
-                                                      "Something went wrong during the process\n%s");
+                                                      "Something went wrong during the process\n%s"), DIRECTORY_DOES_NOT_EXIST(
+                                                          "The directory doesn't exist"), FAILED_TO_CREATE_DIRECTORY(
+                                                              "Failed to create the directory\n%s"), RESOURCE_FOLDER_ARGUMENT_MISSING(
+                                                                  "The resource folder argument is missing");
 
   private String value;
 

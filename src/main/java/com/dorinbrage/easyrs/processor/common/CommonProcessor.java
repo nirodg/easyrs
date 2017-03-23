@@ -1,6 +1,7 @@
 package com.dorinbrage.easyrs.processor.common;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,7 @@ import com.dorinbrage.easyrs.processor.exception.ProcessingException;
 
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public abstract class CommonProcessor<T> extends AbstractProcessor {
+public abstract class CommonProcessor extends AbstractProcessor {
 
   protected Elements elements;
   protected Filer filer;
@@ -31,7 +32,7 @@ public abstract class CommonProcessor<T> extends AbstractProcessor {
   /** Contains all the annotated interfaces */
   protected Map<String, AnnotatedClass> container;
 
-  protected Map<String, T> collectionTypes;
+  protected Set<AnnotatedClass> processedInterfaces;
 
   public final Elements getElements() {
     return elements;
@@ -70,6 +71,7 @@ public abstract class CommonProcessor<T> extends AbstractProcessor {
     elements = processingEnv.getElementUtils();
     filer = processingEnv.getFiler();
     container = new HashMap<String, AnnotatedClass>();
+    processedInterfaces = new HashSet<>();
   }
 
   public void getAnnotatedInterfaces() {
@@ -112,4 +114,13 @@ public abstract class CommonProcessor<T> extends AbstractProcessor {
     }
     return true;
   }
+
+  public Set<AnnotatedClass> getProcessedInterfaces() {
+    return processedInterfaces;
+  }
+
+  public void setProcessedInterfaces(Set<AnnotatedClass> processedInterfaces) {
+    this.processedInterfaces = processedInterfaces;
+  }
+
 }
