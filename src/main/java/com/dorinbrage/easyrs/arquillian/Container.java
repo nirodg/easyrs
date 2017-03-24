@@ -30,7 +30,7 @@ import com.google.gson.internal.LinkedTreeMap;
  */
 public abstract class Container<T, E> {
 
-  private final static String CLIENT_HOST = "http://localhost/";
+  private final static String CLIENT_HOST = "http://localhost:8080";
   private final static String SYSPROP_CLIENT_HOST = "client.host";
   private final static String SYSPROP_CLIENT_USER = "client.user";
   private final static String SYSPROP_CLIENT_PASS = "client.pass";
@@ -179,7 +179,11 @@ public abstract class Container<T, E> {
       }
       return instance;
     } else if (map instanceof Integer) {
-      return new ArrayList<>(dtoData.getGetAll());
+      ArrayList<Object> list = new ArrayList<>(dtoData.getGetAll());
+      for (int i = 0; i < dtoData.getGetAll(); i++) {
+        list.add(i);
+      }
+      return list;
     } else {
       return null;
     }

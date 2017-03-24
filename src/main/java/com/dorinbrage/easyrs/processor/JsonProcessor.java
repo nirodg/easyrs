@@ -57,7 +57,7 @@ public class JsonProcessor extends CommonProcessor {
               item.getValue().getEntity().toString());
 
           pathJsonFile = pathJsonFile
-              .concat(ClassUtils.getShortClassName(item.getValue().getEndpoint().toString()))
+              .concat(ClassUtils.getShortClassName(item.getValue().getEntity().toString()))
               .concat(FILE_JSON_EXTENSIOn);
 
           try (FileWriter fw = new FileWriter(pathJsonFile)) {

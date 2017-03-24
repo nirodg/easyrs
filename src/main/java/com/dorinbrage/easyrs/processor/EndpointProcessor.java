@@ -46,9 +46,7 @@ public class EndpointProcessor extends CommonProcessor {
             }
           }
 
-          generator.init(annotatedClazz,
-              container.get(ClassUtils.getShortClassName(item.getValue().getEndpoint().toString())),
-              filer, elements).build();
+          generator.init(annotatedClazz, container.get(item.getKey()), filer, elements).build();
         } catch (Exception e) {
           e.printStackTrace();
         }
