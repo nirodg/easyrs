@@ -351,7 +351,7 @@ public class ClassBuilder {
   /**
    * Define the global variables
    */
-  private void setVariables() throws ProcessingException{
+  private void setVariables() throws ProcessingException {
     try {
       jw.emitSingleLineComment("Here you can define your global variables", (Object[]) null);
       jw.emitEmptyLine();
@@ -397,9 +397,9 @@ public class ClassBuilder {
       jw.emitAnnotation(Before.class);
 
       jw.beginMethod(METHOD_VOID, METHOD_SETUP, modifiers, null, null);
-      
+
       jw.emitSingleLineComment("Here you can initialize your variables", (Object[]) null);
-      jw.emitEmptyLine();      
+      jw.emitEmptyLine();
 
       jw.endMethod();
       jw.emitEmptyLine();
@@ -455,15 +455,15 @@ public class ClassBuilder {
    */
   private void setImports() throws ProcessingException {
 
-    // Non static classes
+    // Non-static classes
     List<String> imports = new ArrayList<String>();
+    // Static classes
+    List<String> staticImports = new ArrayList<String>();
 
     imports.add(Container.class.getCanonicalName());
     imports.add(Test.class.getCanonicalName());
     imports.add(Before.class.getCanonicalName());
     imports.add(Assert.class.getCanonicalName());
-    imports.add(List.class.getCanonicalName());
-    imports.add(ArrayList.class.getCanonicalName());
     imports.add(annotatedClass.getEntity().toString());
     imports.add(Generated.class.getCanonicalName());
 
@@ -475,14 +475,49 @@ public class ClassBuilder {
       imports.add(RunWith.class.getCanonicalName());
     }
 
-    // Static classes
-    List<String> staticImports = new ArrayList<String>();
-    staticImports
-        .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.GET_ALL.name());
-    staticImports.add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.PUT.name());
-    staticImports.add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.POST.name());
-    staticImports
-        .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.DELETE.name());
+    if (annotatedClass.getClientOperations().length == 1
+        && annotatedClass.getClientOperations()[0].equals(ClientOperation.ALL)) {
+      // Non-static
+      imports.add(List.class.getCanonicalName());
+      imports.add(ArrayList.class.getCanonicalName());
+
+      // Static
+      staticImports
+          .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.GET_ALL.name());
+      staticImports
+          .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.PUT.name());
+      staticImports
+          .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.POST.name());
+      staticImports
+          .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.DELETE.name());
+
+    } else {
+
+      for (ClientOperation operation : annotatedClass.getClientOperations()) {
+        if (operation.equals(ClientOperation.GET_ALL)) {
+          // Non-static
+          imports.add(List.class.getCanonicalName());
+          imports.add(ArrayList.class.getCanonicalName());
+
+          // Static
+          staticImports
+              .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.GET_ALL.name());
+        }
+        if (operation.equals(ClientOperation.PUT)) {
+          staticImports
+              .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.PUT.name());
+        }
+        if (operation.equals(ClientOperation.POST)) {
+          staticImports
+              .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.POST.name());
+        }
+        if (operation.equals(ClientOperation.DELETE)) {
+          staticImports
+              .add(ClientOperation.class.getCanonicalName() + "." + ClientOperation.DELETE.name());
+        }
+      }
+
+    }
 
     try {
       jw.emitImports(imports);
