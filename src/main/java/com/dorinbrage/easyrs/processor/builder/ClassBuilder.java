@@ -302,16 +302,6 @@ public class ClassBuilder {
             StatementType.nameFetchedEntity.getValue(),
             StatementType.nameFetchedEntity.getValue()));
 
-    //
-    // // Delete simpleEntityName
-    // .addStatements(StatementType.defineDeleteEntity.getValue(), simpleEntityName,
-    // StatementType.nameFetchedEntity.getValue(), simpleEntityName,
-    // StatementType.nameEntity.getValue(), annotatedClass.getIdentifier().getValue())
-    // // Assert Null
-    // .addStatements(StatementType.defineAssertNull.getValue(),
-    // StatementType.nameFetchedEntity.getValue()));
-
-
     /*
      * If the operations's field is not specified or operations = {ClientOperation.GET} , by default
      * will define all the methods. Otherwise will check those which are missing the they will be
