@@ -292,12 +292,24 @@ public class ClassBuilder {
         // Add empty line
         .addEmptyLine()
         // Delete simpleEntityName
-        .addStatements(StatementType.defineDeleteEntity.getValue(), simpleEntityName,
+        .addStatements(StatementType.defineDeleteEntity.getValue(),
+            StatementType.nameFetchedEntity.getValue(), StatementType.nameEntity.getValue(),
+            annotatedClass.getIdentifier().getValue())
+        // Assert True of Not Null
+        .addStatements(StatementType.defineTrueorNotNullAssert.getValue(),
             StatementType.nameFetchedEntity.getValue(), simpleEntityName,
-            StatementType.nameEntity.getValue(), annotatedClass.getIdentifier().getValue())
-        // Assert Null
-        .addStatements(StatementType.defineAssertNull.getValue(),
+            StatementType.nameFetchedEntity.getValue(), StatementType.nameFetchedEntity.getValue(),
+            StatementType.nameFetchedEntity.getValue(),
             StatementType.nameFetchedEntity.getValue()));
+
+    //
+    // // Delete simpleEntityName
+    // .addStatements(StatementType.defineDeleteEntity.getValue(), simpleEntityName,
+    // StatementType.nameFetchedEntity.getValue(), simpleEntityName,
+    // StatementType.nameEntity.getValue(), annotatedClass.getIdentifier().getValue())
+    // // Assert Null
+    // .addStatements(StatementType.defineAssertNull.getValue(),
+    // StatementType.nameFetchedEntity.getValue()));
 
 
     /*

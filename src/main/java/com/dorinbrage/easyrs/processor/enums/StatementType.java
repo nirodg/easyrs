@@ -18,7 +18,7 @@ public enum StatementType {
       "%s %s = (%s) getClient().getById(%s)"), defineCreateEntity(
           "%s %s = (%s) getClient().put(%s)"), defineUpdateEntity(
               "%s %s = (%s) getClient().post(%s.%s, %s)"), defineDeleteEntity(
-                  "%s %s = (%s) getClient().delete(%s.%s)"), definePersistEntity(
+                  "Object %s = getClient().delete(%s.%s)"), definePersistEntity(
                       "%s = (%s) getClient().put(%s)"),
 
   /* Entities */
@@ -29,7 +29,8 @@ public enum StatementType {
   defineAssertNull("Assert.assertNull(%s)"), defineAssertNotNull(
       "Assert.assertNotNull(%s)"), defineAssertEquals(
           "Assert.assertEquals(%s, %s)"), defineAssertEqualsSize(
-              "Assert.assertEquals(%s.size(), %s.size())");
+              "Assert.assertEquals(%s.size(), %s.size())"), defineTrueorNotNullAssert(
+                  "if (%s instanceof %s) {\n\tAssert.assertNull(%s);\n\r\t} else if (%s.getClass().equals(boolean.class)\n\t|| %s.getClass().equals(Boolean.class)) { \nAssert.assertTrue((boolean) %s);\r\t}");
 
   private String value;
 
