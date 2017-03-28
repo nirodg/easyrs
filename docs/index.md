@@ -99,6 +99,7 @@ public class UserRestTestEndpoint extends Container<UserDTO,UserEndpoint> {
 ```
 
 Still interested 😄?  Then please take a moment to check [how to setup](/docs/installation.md) properly EasyRs withit your project. 
+
 Currently you can checkout [easyrs-example](https://github.com/nirodg/easyrs-example) where you can find a simple war project runing within EasyRs
 
 # Contribute
