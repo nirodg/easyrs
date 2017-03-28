@@ -4,7 +4,7 @@
 
 What would you say if would be a way how to reduce the time writing comparison tests for your endpoints.. or what if you could test it as a Singleton or within Arquillian? 
 
-Generating basic crud operations it´s so fast that withing 5 minutes you have them already generated ( al right, might take you 2 minutes longer the first time 😉 )
+Generating basic crud operations it´s so fast that within 5 minutes you have them already generated ( al right, might take you 2 minutes longer the first time 😉 )
 
 So let´s define our test as it´s shown below:
 
