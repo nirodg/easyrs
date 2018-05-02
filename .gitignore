@@ -76,5 +76,17 @@ buildNumber.properties
 # End of https://www.gitignore.io/api/maven
 /.apt_generated/
 
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+nbactions.xml
+
 # Deployment scripts
 maven-central-deploy*
+
+# Rultor files
+.rultor.yml

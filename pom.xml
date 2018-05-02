@@ -1,9 +1,20 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.dbrage.lib</groupId>
+	<parent>
+		<groupId>com.jcabi</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.48.4</version>
+	</parent>
+
+	<groupId>com.dorinbrage</groupId>
 	<artifactId>easyrs</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
+
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>This library provides an easy way to test the basic CRUD operation for your endpoints. The tests can be executed within Arquillian or as a Singleton application</description>
+	<url>http://github.com/nirodg/easyrs</url>
 
 	<properties>
 		<easyrs.test.folder>easyrs-tests</easyrs.test.folder>
@@ -86,12 +97,12 @@
 			<scope>compile</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
-			<scope>compile</scope>
+			<version>3.1.1.Final</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
@@ -103,7 +114,11 @@
 			<artifactId>gson</artifactId>
 			<version>2.6.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -133,33 +148,53 @@
 				<version>1.8.1</version>
 				<configuration>
 					<tag>${project.artifactId}-${project.version}</tag>
-			        <providerImplementations>
-            	  		<git>jgit</git>
-        			</providerImplementations>
+					<providerImplementations>
+						<git>jgit</git>
+					</providerImplementations>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.apache.maven.scm</groupId>
 						<artifactId>maven-scm-provider-jgit</artifactId>
-			        	<version>1.9.5</version>
+						<version>1.9.5</version>
 					</dependency>
-				</dependencies>				
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
 
 	<scm>
+		<tag>HEAD</tag>
 		<url>https://github.com/nirodg/easyrs</url>
-		<connection>scm:git:git@github.com:nirodg/easyrs.git</connection>
-		<developerConnection>scm:git:git@github.com:nirodg/easyrs.git</developerConnection>
-	  	<tag>easyrs-0.0.1</tag>
-  </scm>
-	
+		<connection>scm:git:https://github.com/nirodg/easyrs.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/nirodg/easyrs.git</developerConnection>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/nirodg/easyrs/issues</url>
+	</issueManagement>
+
 	<distributionManagement>
 		<repository>
 			<id>github</id>
 			<url>https://github.com/nirodg/easyrs</url>
 		</repository>
 	</distributionManagement>
-	
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Dorin Brage</name>
+			<email>github@dorinbrage.com</email>
+			<organization>Dorin Brage</organization>
+			<organizationUrl>https://github.com/nirodg</organizationUrl>
+		</developer>
+	</developers>
 </project>
